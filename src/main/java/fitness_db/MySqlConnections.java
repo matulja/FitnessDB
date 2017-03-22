@@ -11,7 +11,8 @@ class MySqlConnectionsInfo extends URLConnectorInfoImpl  {
     private static final long serialVersionUID = 1L;
 
         public MySqlConnectionsInfo() {
-          super("jdbc:mysql://localhost:3306/fitness", "root", "pass", "", "", DatabaseType.MYSQL);
+          super("jdbc:mysql://localhost:3306/fitness", "mary", "password",
+                  "com.mysql.jdbc.Driver", "fitness", DatabaseType.MYSQL);
         }
 
     }

@@ -25,7 +25,7 @@ public class CopyFitnessDBFomSqlToPostgre {
 
         //Repository initialisieren
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
-        connectorRepository.addTargetDatabaseConfiguration(DatabaseType.POSTGRESQL, new GenericTargetDatabaseConfiguration(connectorRepository));
+        //connectorRepository.addTargetDatabaseConfiguration(DatabaseType.POSTGRESQL, new GenericTargetDatabaseConfiguration(connectorRepository));
 
         //add Source & Target ConnectionInfo
         connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfo());
@@ -41,17 +41,17 @@ public class CopyFitnessDBFomSqlToPostgre {
 
         //delete the tables
 
-        /*DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
+        DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
         dropTablesTool.dropIndexes(TARGET);
         dropTablesTool.dropForeignKeys(TARGET);
-        dropTablesTool.dropTables(TARGET);*/
+        dropTablesTool.dropTables(TARGET);
 
 
         //copy only Schema
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
 
-
         //copy Tables
         new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE,TARGET);
+
     }
 }

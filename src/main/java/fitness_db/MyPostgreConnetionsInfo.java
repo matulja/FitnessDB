@@ -11,9 +11,8 @@ public class MyPostgreConnetionsInfo extends URLConnectorInfoImpl {
     private static final long serialVersionUID = 1L;
 
     public MyPostgreConnetionsInfo() {
-        super("jdbc:postgresql://localhost:/fitness", "root", "pass", "", "", DatabaseType.POSTGRESQL);
-
-
+        super("jdbc:postgresql://localhost/", "user", "pass",
+                "org.postgresql.Driver", "fitness", DatabaseType.POSTGRESQL);
     }
 
 }
