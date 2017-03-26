@@ -91,6 +91,14 @@ public class CopyFitnessDBFomSqlToPostgre {
         //copy Tables
         new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE,TARGET);
 
+        //add Connection Hint für Umbenennung
+
+        /*connectorRepository.addConnectorHint(TARGET, new MappingColumnData());*/
+
+
+
+
+
 
 
     }
