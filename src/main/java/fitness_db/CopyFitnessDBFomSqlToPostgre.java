@@ -1,8 +1,9 @@
 package fitness_db;
 
-import de.akquinet.jbosscc.guttenbase.configuration.impl.GenericTargetDatabaseConfiguration;
-import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
+import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
+import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
+import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
@@ -31,7 +32,7 @@ public class CopyFitnessDBFomSqlToPostgre {
         connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfo());
         connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfo());
 
-        //get Source Name
+        //get Source Name, get Matadata
         DatabaseMetaData source = connectorRepository.getDatabaseMetaData(SOURCE);
         DatabaseMetaData target = connectorRepository.getDatabaseMetaData(TARGET);
 
@@ -47,11 +48,50 @@ public class CopyFitnessDBFomSqlToPostgre {
         dropTablesTool.dropTables(TARGET);
 
 
+        //getMetadata for source
+
+        System.out.println("Schema" +source.getSchema());
+        System.out.println("Table Name" + source.getTableMetaData().toString());
+
+        //Metadata und ColumnData deklarieren
+
+        TableMetaData sourceData= (TableMetaData) connectorRepository.getDatabaseMetaData(SOURCE);
+        sourceData.getRowCount();
+
+        ColumnMetaData sourceColumn= (ColumnMetaData) connectorRepository.getDatabaseMetaData(SOURCE);
+        sourceColumn.getColumnType();
+
+        System.out.println("Name Column"+ sourceColumn.getColumnName() );
+        System.out.println("Type Column"+ sourceColumn.getColumnType() );
+        System.out.println("Anzahl Zeilen" +  sourceData.getRowCount());
+
+
+        final int numberOfRowsPerBatch = 1;
+        final int sourceRowCount = sourceData.getRowCount();
+        final int numberOfBatches = sourceRowCount / numberOfRowsPerBatch;
+
+        System.out.println("numberOfBatches" + numberOfBatches);
+        System.out.println("IndexMetaData" + sourceData.getIndexesForColumn(sourceColumn) );
+        System.out.println("PrimaryKeyColumn" + sourceData.getPrimaryKeyColumns());
+
+        // getConnector Hint
+
+        System.out.println("Connectors Ids" +
+                connectorRepository.getConnectorIds());
+
+
+        final TableNameMapper tableNameMapper = connectorRepository.getConnectorHint(TARGET, TableNameMapper.class).getValue();
+        System.out.println("Connector Hint for Target tableNameMapper " + tableNameMapper);
+
+
+
         //copy only Schema
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
 
         //copy Tables
         new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE,TARGET);
+
+
 
     }
 }
