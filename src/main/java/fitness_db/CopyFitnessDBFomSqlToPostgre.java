@@ -1,16 +1,18 @@
 package fitness_db;
 
-import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
-import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
+import de.akquinet.jbosscc.guttenbase.configuration.impl.GenericTargetDatabaseConfiguration;
+import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
+import de.akquinet.jbosscc.guttenbase.meta.*;
 import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
-import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CreateSchemaTool;
+import fitness_db.mapping.MappingTableNameFilter;
 
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.List;
 
 
 /**
@@ -18,30 +20,51 @@ import java.sql.SQLException;
  */
 public class CopyFitnessDBFomSqlToPostgre {
 
-
     public static final String SOURCE = "source";
     public static final String TARGET = "target";
+    private static String columns= "";
+    private static String table_name= "";
+    private static String columns_name= "";
+    private static String foreign_key= "";
+    private static String foreign_name= "";
+
+
+    private static ColumnMetaData columns_refer;
+    private static List<ColumnMetaData> columns_primary;
+    private static String columns_index;
+    private static int columns_type= 0;
+    private static int columns_row= 0;
+    private static int columns_count= 0;
+    private static int getColumns_row= 0;
+
+
 
     public static void main(final String[] args) throws SQLException {
 
         //Repository initialisieren
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
-        //connectorRepository.addTargetDatabaseConfiguration(DatabaseType.POSTGRESQL, new GenericTargetDatabaseConfiguration(connectorRepository));
+
+        //to delete Tables
+        connectorRepository.addTargetDatabaseConfiguration(DatabaseType.POSTGRESQL, new GenericTargetDatabaseConfiguration(connectorRepository));
 
         //add Source & Target ConnectionInfo
         connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfo());
         connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfo());
 
+        //add ConnectorHints and Mapping Data
+
+       connectorRepository.addConnectorHint("source", new MappingTableNameFilter());
+       connectorRepository.addConnectorHint("target", new MappingTableNameFilter());
+
         //get Source Name, get Matadata
         DatabaseMetaData source = connectorRepository.getDatabaseMetaData(SOURCE);
         DatabaseMetaData target = connectorRepository.getDatabaseMetaData(TARGET);
 
-        System.out.println(source.getDatabaseName());
-        System.out.println(target.getDatabaseName());
+        System.out.println("Source DB"+ source.getDatabaseName());
+        System.out.println("Target DB" + target.getDatabaseName());
 
 
         //delete the tables
-
         DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
         dropTablesTool.dropIndexes(TARGET);
         dropTablesTool.dropForeignKeys(TARGET);
@@ -49,41 +72,8 @@ public class CopyFitnessDBFomSqlToPostgre {
 
 
         //getMetadata for source
-
-        System.out.println("Schema" +source.getSchema());
-        System.out.println("Table Name" + source.getTableMetaData().toString());
-
-        //Metadata und ColumnData deklarieren
-
-        TableMetaData sourceData= (TableMetaData) connectorRepository.getDatabaseMetaData(SOURCE);
-        sourceData.getRowCount();
-
-        ColumnMetaData sourceColumn= (ColumnMetaData) connectorRepository.getDatabaseMetaData(SOURCE);
-        sourceColumn.getColumnType();
-
-        System.out.println("Name Column"+ sourceColumn.getColumnName() );
-        System.out.println("Type Column"+ sourceColumn.getColumnType() );
-        System.out.println("Anzahl Zeilen" +  sourceData.getRowCount());
-
-
-        final int numberOfRowsPerBatch = 1;
-        final int sourceRowCount = sourceData.getRowCount();
-        final int numberOfBatches = sourceRowCount / numberOfRowsPerBatch;
-
-        System.out.println("numberOfBatches" + numberOfBatches);
-        System.out.println("IndexMetaData" + sourceData.getIndexesForColumn(sourceColumn) );
-        System.out.println("PrimaryKeyColumn" + sourceData.getPrimaryKeyColumns());
-
-        // getConnector Hint
-
-        System.out.println("Connectors Ids" +
-                connectorRepository.getConnectorIds());
-
-
-        final TableNameMapper tableNameMapper = connectorRepository.getConnectorHint(TARGET, TableNameMapper.class).getValue();
-        System.out.println("Connector Hint for Target tableNameMapper " + tableNameMapper);
-
-
+        System.out.println("Source Schema " +source.getSchema());
+        System.out.println("Table Name for SourceDB " + source.getTableMetaData().toString());
 
         //copy only Schema
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
@@ -91,13 +81,62 @@ public class CopyFitnessDBFomSqlToPostgre {
         //copy Tables
         new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE,TARGET);
 
-        //add Connection Hint für Umbenennung
 
-        /*connectorRepository.addConnectorHint(TARGET, new MappingColumnData());*/
-
-
+        //TableMetadata
+        List<TableMetaData> sourceTableMetaData= connectorRepository.getDatabaseMetaData(SOURCE).getTableMetaData();
 
 
+        columns = sourceTableMetaData.toString();
+        columns_row= sourceTableMetaData.get(1).getRowCount();
+        table_name= sourceTableMetaData.get(1).getTableName();
+        columns_count= sourceTableMetaData.get(1).getColumnCount();
+
+
+        System.out.println("All Table names: " +   columns);
+        System.out.println("Table Name for  : " + table_name);
+        System.out.println("Columns Row for : " + columns_row);
+        System.out.println("Columns Count for : " + columns_count);
+
+
+        //ColumnMetaData
+
+        //ColumnMetaData sourceColumnMetaData= connectorRepository.getDatabaseMetaData(SOURCE).getTableMetaData().get(0).getColumnMetaData().get(0);
+        //ColumnMetaData targetColumnMetaData= connectorRepository.getDatabaseMetaData(TARGET).getTableMetaData().get(0).getColumnMetaData().get(0);
+
+
+        columns_name=sourceTableMetaData.get(1).getColumnMetaData().get(0).getColumnName();
+        columns_type=sourceTableMetaData.get(1).getColumnMetaData().get(0).getColumnType();
+        columns_primary= sourceTableMetaData.get(1).getPrimaryKeyColumns();
+        columns_refer= sourceTableMetaData.get(1).getColumnMetaData().get(0).getReferencedColumn();
+        columns_index= sourceTableMetaData.get(1).getIndexesForColumn(columns_primary.get(0)).get(0).getIndexName();
+
+        System.out.println("Columns Name for Index 0: " +columns_name);
+        System.out.println("Columns Type for: " +columns_type);
+        System.out.println("Columns Refer for: " +columns_refer);
+        System.out.println("Columns Primary Columns for: " +columns_primary);
+        System.out.println("Columns Index for: " +columns_index);
+
+
+        //get ForeignKeyMeta Data --???
+
+        /*List<ForeignKeyMetaData> sourceForeignKeyMetaData= connectorRepository.getDatabaseMetaData(SOURCE).
+                getTableMetaData().get(0).getExportedForeignKeys();
+
+        foreign_key=sourceForeignKeyMetaData.toString();
+        System.out.println("Foreign key for table: " + foreign_key) ; */
+
+        //foreign_name=sourceForeignKeyMetaData.get(0).getForeignKeyName();
+        //System.out.println("Foreign key for table name: " + foreign_name) ;
+
+
+        final int numberOfRowsPerBatch = 1;
+        final int sourceRowCount = columns_row;
+        final int numberOfBatches = sourceRowCount / numberOfRowsPerBatch;
+        System.out.println("numberOfBatches: " + numberOfBatches);
+
+        // getConnector Hint
+        System.out.println("Connectors Ids: " +
+                connectorRepository.getConnectorIds());
 
 
 

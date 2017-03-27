@@ -1,23 +1,28 @@
-package fitness_db;
+package fitness_db.mapping;
 
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnDataMapper;
 import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
 
 import java.sql.SQLException;
 
-/**
- * Created by Marynasuprun on 26.03.2017.
- */
-public class MappingColumnData implements ColumnDataMapper {
 
-    //map for column name? " "
+/**
+ * look at columnName starts with "abo" and add to columnName "value + _id"
+ *
+ * Created by Marynasuprun on 26.03.2017.
+ *
+ */
+
+
+public class MappingColumnName implements ColumnDataMapper {
+
 
     @Override
     public boolean isApplicable(ColumnMetaData sourceColumnMetaData,
                                 ColumnMetaData targetColumnMetaData) throws SQLException {
 
         String columnName=sourceColumnMetaData.getColumnName();
-        return columnName.equalsIgnoreCase("");
+        return columnName.startsWith("abo");
     }
 
 
@@ -38,9 +43,18 @@ public class MappingColumnData implements ColumnDataMapper {
         }
 
         String mapString = mapValue;
-        mapString = mapString.toUpperCase() + "map";
+        mapString = mapString.toUpperCase() + " " +"_id";
 
         return mapString;
+    }
+
+    public static void main(final String[] args) throws SQLException {
+
+
+        MappingColumnName map = new MappingColumnName();
+        map.mapStrings("");
+        System.out.println("map: " + map.mapStrings(""));
+
     }
 
 }
