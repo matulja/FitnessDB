@@ -14,7 +14,7 @@ import java.util.UUID;
  *
  * Created by mfehler on 27.03.17.
  */
-public class MapingColumnsIdtoUUID implements ColumnDataMapper {
+public class MappingColumnsIDtoUUID implements ColumnDataMapper {
     @Override
     public boolean isApplicable(ColumnMetaData sourceColumnMetaData,
                                 ColumnMetaData targetColumnMetaData) throws SQLException {

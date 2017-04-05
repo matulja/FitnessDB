@@ -9,7 +9,7 @@ import java.sql.SQLException;
 
 /**
  *
- * add some "_tab" to table name
+ * look at table starts with "tab_"
  *
  * Created by mfehler on 27.03.17.
  */
@@ -17,8 +17,7 @@ public class MappingTableName implements TableNameMapper, TableMapper{
     @Override
     public String mapTableName(final TableMetaData sourceTableMetaData) throws SQLException {
 
-        final String newTableName= "_tab" + sourceTableMetaData.getTableName();
-        return newTableName;
+        return "tab_" + sourceTableMetaData.getTableName();
     }
 
     @Override

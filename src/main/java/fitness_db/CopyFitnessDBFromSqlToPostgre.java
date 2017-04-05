@@ -9,7 +9,6 @@ import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CreateSchemaTool;
-import fitness_db.mapping.MappingTableNameFilter;
 
 import java.sql.*;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.List;
 /**
  * Created by mfehler on 21.03.17.
  */
-public class CopyFitnessDBFomSqlToPostgre {
+public class CopyFitnessDBFromSqlToPostgre {
 
     public static final String SOURCE = "source";
     public static final String TARGET = "target";
@@ -51,17 +50,13 @@ public class CopyFitnessDBFomSqlToPostgre {
         connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfo());
         connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfo());
 
-        //add ConnectorHints and Mapping Data
-
-       connectorRepository.addConnectorHint("source", new MappingTableNameFilter());
-       connectorRepository.addConnectorHint("target", new MappingTableNameFilter());
-
         //get Source Name, get Matadata
         DatabaseMetaData source = connectorRepository.getDatabaseMetaData(SOURCE);
         DatabaseMetaData target = connectorRepository.getDatabaseMetaData(TARGET);
 
-        System.out.println("Source DB"+ source.getDatabaseName());
-        System.out.println("Target DB" + target.getDatabaseName());
+
+        System.out.println("SourceDB"+ source.getDatabaseName());
+        System.out.println("TargetDB" + target.getDatabaseName());
 
 
         //delete the tables
@@ -73,10 +68,17 @@ public class CopyFitnessDBFomSqlToPostgre {
 
         //getMetadata for source
         System.out.println("Source Schema " +source.getSchema());
-        System.out.println("Table Name for SourceDB " + source.getTableMetaData().toString());
 
         //copy only Schema
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+
+        //get the Script Data
+        List<String> script = new CreateSchemaTool(connectorRepository).createDDLScript(SOURCE, "foo");
+
+        for (String s : script) {
+            System.out.println(s);
+        }
+
 
         //copy Tables
         new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE,TARGET);
@@ -85,17 +87,20 @@ public class CopyFitnessDBFomSqlToPostgre {
         //TableMetadata
         List<TableMetaData> sourceTableMetaData= connectorRepository.getDatabaseMetaData(SOURCE).getTableMetaData();
 
+        for (int index=0; index>sourceTableMetaData.size(); index++)
+        {
+            table_name=sourceTableMetaData.get(index).getTableName();
+        }
 
-        columns = sourceTableMetaData.toString();
-        columns_row= sourceTableMetaData.get(1).getRowCount();
-        table_name= sourceTableMetaData.get(1).getTableName();
-        columns_count= sourceTableMetaData.get(1).getColumnCount();
+        //columns = sourceTableMetaData.
+        //columns_row= sourceTableMetaData.get(1).getRowCount();
+        //table_name= sourceTableMetaData.get(1).getTableName();
+        //columns_count= sourceTableMetaData.get(1).getColumnCount();
 
 
-        System.out.println("All Table names: " +   columns);
         System.out.println("Table Name for  : " + table_name);
-        System.out.println("Columns Row for : " + columns_row);
-        System.out.println("Columns Count for : " + columns_count);
+       // System.out.println("Columns Row for : " + columns_row);
+       // System.out.println("Columns Count for : " + columns_count);
 
 
         //ColumnMetaData
@@ -119,11 +124,11 @@ public class CopyFitnessDBFomSqlToPostgre {
 
         //get ForeignKeyMeta Data --???
 
-        /*List<ForeignKeyMetaData> sourceForeignKeyMetaData= connectorRepository.getDatabaseMetaData(SOURCE).
-                getTableMetaData().get(0).getExportedForeignKeys();
+        List<ForeignKeyMetaData> sourceForeignKeyMetaData= connectorRepository.getDatabaseMetaData(SOURCE).
+                getTableMetaData().get(1).getExportedForeignKeys();
 
         foreign_key=sourceForeignKeyMetaData.toString();
-        System.out.println("Foreign key for table: " + foreign_key) ; */
+        System.out.println("Foreign key for table: " + foreign_key) ;
 
         //foreign_name=sourceForeignKeyMetaData.get(0).getForeignKeyName();
         //System.out.println("Foreign key for table name: " + foreign_name) ;
