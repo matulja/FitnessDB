@@ -35,8 +35,8 @@ public class CustomTableNameMapper implements TableNameMapper
   public String mapTableName(final TableMetaData tableMetaData) {
 
     String tableName = _caseConversionMode.convert(tableMetaData.getTableName());
-    //return tableName + Nr_PREFIX  + counter++;
-    return tableName + Nr_PREFIX;
+    return tableName + Nr_PREFIX  + counter ++;
+    //return tableName + Nr_PREFIX;
 
   }
 

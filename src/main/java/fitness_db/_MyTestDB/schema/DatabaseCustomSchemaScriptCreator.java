@@ -1,7 +1,5 @@
 package fitness_db._MyTestDB.schema;
 
-import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
-import de.akquinet.jbosscc.guttenbase.defaults.impl.DefaultColumnNameMapper;
 import de.akquinet.jbosscc.guttenbase.hints.CaseConversionMode;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
@@ -12,7 +10,10 @@ import de.akquinet.jbosscc.guttenbase.tools.TableOrderTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.SchemaColumnTypeMapper;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Create DDL script from given database meta data.
@@ -23,7 +24,7 @@ import java.util.*;
  * @author M. Dahm
  */
 
-@SuppressWarnings({"MismatchedQueryAndUpdateOfStringBuilder", "UnusedAssignment"})
+@SuppressWarnings({"MismatchedQueryAndUpdateOfStringBuilder", "UnusedAssignment", "Duplicates"})
 public class DatabaseCustomSchemaScriptCreator {
     private static final Random RANDOM = new Random();
     public static final int MAX_ID_LENGTH = 64;
@@ -63,16 +64,27 @@ public class DatabaseCustomSchemaScriptCreator {
     public List<String> createTableStatements() throws SQLException {
         final List<TableMetaData> tables = new TableOrderTool().getOrderedTables(_sourceDatabaseMetaData.getTableMetaData(), true);
 
-        //Filter for Table
+        //Filter
 
-
-        return createTableStatements(tables);
+        return createTableStatements (tables);
     }
+
+    //Columns
+
+    /*public List<String> createColumns(List<ColumnMetaData> orderedSourceColumns) throws SQLException {
+
+        final TableMetaData tableMetaData= (TableMetaData) _connectorRepository.getDatabaseMetaData(_sourceConnectorId);
+        orderedSourceColumns = ColumnOrderHint.getSortedColumns(_connectorRepository, _sourceConnectorId, tableMetaData);
+        System.out.println("Columns " + createColumns(orderedSourceColumns));
+        return createColumns(orderedSourceColumns);
+    }*/
+
+
 
     public List<String> createTableStatements(final List<TableMetaData> tables) throws SQLException {
         final List<String> result = new ArrayList<>();
 
-        for (final TableMetaData tableMetaData : tables) {
+       for (final TableMetaData tableMetaData : tables) {
             result.add(createTable(tableMetaData));
         }
 
@@ -149,8 +161,8 @@ public class DatabaseCustomSchemaScriptCreator {
         String builder = "CREATE TABLE " + ("".equals(_targetSchema) ? "" : _targetSchema + ".")
                 + tableNameMapper.mapTableName(tableMetaData)
                 + "\n(\n" + "\n);";
-
         return builder;
+
 
     }
 
@@ -158,11 +170,9 @@ public class DatabaseCustomSchemaScriptCreator {
                                              final int counter) throws SQLException {
 
         final TableNameMapper tableNameMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, TableNameMapper.class).getValue();
-        final ColumnNameMapper columnNameMapper = new DefaultColumnNameMapper(CaseConversionMode.LOWER);
+        final ColumnNameMapper columnNameMapper =  _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnNameMapper.class).getValue();
 
-        final ColumnMapper columnMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnMapper.class).getValue();
-       // final ColumnNameMapper columnNameMapper= _connectorRepository.getConnectorHint(_sourceConnectorId,ColumnNameMapper.class).getValue();
-
+        //final ColumnMapper columnMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnMapper.class).getValue();
 
         final String tableName = tableNameMapper.mapTableName(tableMetaData);
         final String pkName = "PK_" + tableName + "_" + counter;
@@ -186,7 +196,6 @@ public class DatabaseCustomSchemaScriptCreator {
     private String createIndex(final IndexMetaData indexMetaData, final int counter) throws SQLException {
 
         final TableNameMapper tableNameMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, TableNameMapper.class).getValue();
-
         final TableMetaData tableMetaData = indexMetaData.getTableMetaData();
         final String indexName = createConstraintName("IDX_", CaseConversionMode.UPPER.convert(indexMetaData.getIndexName())
                         + "_"
@@ -218,6 +227,47 @@ public class DatabaseCustomSchemaScriptCreator {
                 + "(");
         for (final Iterator<ColumnMetaData> iterator = indexMetaData.getColumnMetaData().iterator(); iterator.hasNext(); ) {
             final ColumnMetaData columnMetaData = iterator.next();
+
+            String column=columnMetaData.getColumnName();
+           System.out.println("ColumnsName " +  columnNameMapper.mapColumnName(columnMetaData));
+
+       //Columns Mapping
+
+           /* final List<TableMetaData> tableSourceMetaDatas = TableOrderHint.getSortedTables(_connectorRepository, _sourceConnectorId);
+            for (final TableMetaData sourceTableMetaData : tableSourceMetaDatas)
+
+            {
+                final List<ColumnMetaData> sourceColumns = sourceTableMetaData.getColumnMetaData();
+                final Map<String, String> map = new HashMap<>();
+
+                for (final ColumnMetaData sourceColumnMetaData : sourceColumns)
+                {
+                    final int columnCount =sourceTableMetaData.getColumnCount();
+                    final String columnName=sourceColumnMetaData.getColumnName();
+                    for (int i = 1; i <= columnCount; i++)
+                    {
+                        map.put(columnName,"");
+                        map.put("PASSWORD", "286400");
+                        //System.out.println(" Column Name map" + map)
+                        System.out.println("Column Name " + sourceColumnMetaData.getColumnName());
+
+
+                    }
+                    Iterator<String> keySetIterator = map.keySet().iterator();
+                    while(keySetIterator.hasNext()){
+                        String key = keySetIterator.next();
+                        System.out.println("Key: " + key + " Value: " + map.get(key));
+                    }
+
+
+
+                }
+
+
+            }*/
+
+
+
 
             builder.append(columnNameMapper.mapColumnName(columnMetaData));
 
@@ -289,6 +339,7 @@ public class DatabaseCustomSchemaScriptCreator {
         //Mapping
         final TableNameMapper tableNameMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, TableNameMapper.class).getValue();
         final ColumnMapper columnMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnMapper.class).getValue();
+
 
         final StringBuilder builder = new StringBuilder();
         final ColumnNameMapper columnNameMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnNameMapper.class).getValue();

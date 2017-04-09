@@ -4,10 +4,8 @@ package fitness_db;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
-
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CreateSchemaTool;
-import fitness_db.mapping.*;
 
 import java.sql.SQLException;
 
@@ -81,7 +79,7 @@ public class CopyFitnessDBMappingData {
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
 
         //copy Tables
-        //new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
+        new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
 
         /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
 
