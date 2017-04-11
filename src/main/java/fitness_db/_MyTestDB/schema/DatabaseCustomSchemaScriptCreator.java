@@ -37,7 +37,6 @@ public class DatabaseCustomSchemaScriptCreator {
     private final String _sourceConnectorId;
 
 
-
     public DatabaseCustomSchemaScriptCreator(
             final ConnectorRepository connectorRepository,
             final String sourceConnectorId,
