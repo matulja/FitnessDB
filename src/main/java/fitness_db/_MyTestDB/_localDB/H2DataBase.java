@@ -6,9 +6,8 @@ import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
-import fitness_db._MyTestDB.mapping.CustomColumnName;
-import fitness_db._MyTestDB.mapping.CustomTableNameFilter;
-import fitness_db._MyTestDB.mapping.CustomTableNameMapper;
+import de.akquinet.jbosscc.guttenbase.tools.ScriptExecutorTool;
+import fitness_db._MyTestDB.mapping.CustomColumnRenameName;
 import fitness_db._MyTestDB.schema.CreateCustomSchemaTool;
 
 import java.util.List;
@@ -27,18 +26,18 @@ public class H2DataBase {
         final ConnectorRepository _connectorRepository = new ConnectorRepositoryImpl();
         _connectorRepository.addConnectionInfo(CONNECTOR_ID, new H2ConnectionInfo());
 
-        // add MappingColumnNameFilter -->  copy only columns starts with "FOO_USER"
+        // add MappingColumnNameFilter -->  copy only columns starts with "FOO"
 
-        _connectorRepository.addConnectorHint(CONNECTOR_ID,new CustomTableNameFilter());
+       // _connectorRepository.addConnectorHint(CONNECTOR_ID,new CustomTableNameFilter());
 
 
         //Mapping Table for tableName
-        _connectorRepository.addConnectorHint(CONNECTOR_ID, new TableNameMapperHint() {
+        /*_connectorRepository.addConnectorHint(CONNECTOR_ID, new TableNameMapperHint() {
             @Override
             public TableNameMapper getValue() {
                 return new CustomTableNameMapper();
             }
-        });
+        });*/
 
 
         //Mapping ColumnName
@@ -46,7 +45,7 @@ public class H2DataBase {
         _connectorRepository.addConnectorHint(CONNECTOR_ID, new ColumnNameMapperHint() {
                     @Override
                     public ColumnNameMapper getValue() {
-                        return new CustomColumnName();
+                        return new CustomColumnRenameName();
                     }
                 });
 
@@ -55,7 +54,7 @@ public class H2DataBase {
                 System.out.println("schema");
 
 
-       // new ScriptExecutorTool(_connectorRepository).executeFileScript(CONNECTOR_ID,true, false, "/ddl/tables.sql");
+      // new ScriptExecutorTool(_connectorRepository).executeFileScript(CONNECTOR_ID,true, false, "/ddl/tables.sql");
         System.out.println("ScriptExecutorTool");
         //Script
         List< String > script = new CreateCustomSchemaTool(_connectorRepository).createDDLScript(CONNECTOR_ID, "test");

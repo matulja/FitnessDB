@@ -5,28 +5,29 @@ import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 
 /**
- * add id to TableName
+ * look at columnName starts with some value and replace them
  * <p>
  * &copy; 2012-2020 akquinet tech@spree
  * </p>
  *
  * @author M. Dahm
+ *
+ *
  */
-public class CustomTableNameMapper implements TableNameMapper
+public class CustomTableName implements TableNameMapper
 {
   private final CaseConversionMode _caseConversionMode;
-  public static Integer counter=1;
-  public static final String Nr_PREFIX = "_Nr";
+  public static final String Nr_PREFIX = "_";
 
 
-  public CustomTableNameMapper(final CaseConversionMode caseConversionMode, final boolean addSchema)
+  public CustomTableName(final CaseConversionMode caseConversionMode, final boolean addSchema)
   {
     assert caseConversionMode != null : "caseConversionMode != null";
     _caseConversionMode = caseConversionMode;
 
   }
 
-  public CustomTableNameMapper()
+  public CustomTableName()
   {
     this(CaseConversionMode.NONE, true);
   }
@@ -35,10 +36,8 @@ public class CustomTableNameMapper implements TableNameMapper
   public String mapTableName(final TableMetaData tableMetaData) {
 
     String tableName = _caseConversionMode.convert(tableMetaData.getTableName());
-    return tableName + Nr_PREFIX  + counter ++;
-    //return tableName + Nr_PREFIX;
+    return Nr_PREFIX + tableName;
 
   }
-
 
 }

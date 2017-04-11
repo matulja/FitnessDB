@@ -15,8 +15,8 @@ public class CustomTableNameFilter extends RepositoryTableFilterHint {
     public RepositoryTableFilter getValue() {
         return table -> {
 
-            final String nameCase=table.getTableName();
-            return nameCase.equals("FOO_ROLE");
+            final String tableCase=table.getTableName();
+            return tableCase.startsWith("o")||tableCase.startsWith ("p")||tableCase.startsWith ("c") ||tableCase.startsWith ("e") ;
         };
     }
 }

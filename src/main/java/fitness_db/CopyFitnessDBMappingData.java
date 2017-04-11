@@ -79,7 +79,7 @@ public class CopyFitnessDBMappingData {
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
 
         //copy Tables
-        new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
+        //new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
 
         /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
 

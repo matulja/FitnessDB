@@ -12,7 +12,7 @@ public class MyPostgreConnetionsInfoTest extends URLConnectorInfoImpl {
 
     public MyPostgreConnetionsInfoTest() {
         super("jdbc:postgresql://localhost/", "user", "pass",
-                "org.postgresql.Driver", "mytestdb", DatabaseType.POSTGRESQL);
+                "org.postgresql.Driver", "shopdb", DatabaseType.POSTGRESQL);
     }
 
 
