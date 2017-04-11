@@ -1,15 +1,21 @@
 package fitness_db._MyTestDB;
 
+import de.akquinet.jbosscc.guttenbase.connector.ConnectorInfo;
+import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnNameMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.TableNameMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
+import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
+import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
 
+import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
+import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
 import fitness_db._MyTestDB.connInfo.MyPostgreConnetionsInfoTest;
 import fitness_db._MyTestDB.connInfo.MySqlConnectionsInfoTest;
 import fitness_db._MyTestDB.mapping.*;
@@ -17,7 +23,9 @@ import fitness_db._MyTestDB.schema.CreateCustomSchemaTool;
 import fitness_db._MyTestDB.type_Column.CustomColumnTypeMapper;
 import fitness_db._MyTestDB.type_Column.CustomColumnTypeMapperHint;
 import fitness_db._MyTestDB.type_Column.CustomDefaultColumnTypeMapper;
+import org.apache.log4j.Logger;
 
+import java.lang.annotation.Target;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -26,6 +34,7 @@ import java.util.List;
  * Created by mfehler on 21.03.17.
  */
 public class CopySchemaTestDB {
+
 
     public static final String SOURCE = "source";
     public static final String TARGET = "target";
@@ -39,7 +48,6 @@ public class CopySchemaTestDB {
         connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfoTest());
         connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfoTest());
 
-
         //delete the tables
         //DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
         //dropTablesTool.dropIndexes(TARGET);
@@ -49,12 +57,12 @@ public class CopySchemaTestDB {
 
         //add Mapping TableFilter -->  copy only tables starts with " "
         connectorRepository.addConnectorHint(SOURCE,new CustomTableNameFilter());
-        connectorRepository.addConnectorHint(TARGET, new CustomTableNameFilter());
+        connectorRepository.addConnectorHint(TARGET,new CustomTableNameFilter());
 
         //add Mapping ColumnFilter --> copy tables starts with some value
 
        connectorRepository.addConnectorHint(SOURCE,new CustomColumnNameFilter());
-       connectorRepository.addConnectorHint(TARGET, new CustomColumnNameFilter());
+       connectorRepository.addConnectorHint(TARGET,new CustomColumnNameFilter());
 
 
         //add Mapping ColumnName --> rename Columns Name
@@ -66,6 +74,7 @@ public class CopySchemaTestDB {
         });
 
         //add MappingTable  --> rename tables
+
         connectorRepository.addConnectorHint(SOURCE, new TableNameMapperHint() {
             @Override
             public TableNameMapper getValue() {
@@ -78,25 +87,31 @@ public class CopySchemaTestDB {
         connectorRepository.addConnectorHint(SOURCE, new CustomColumnTypeMapperHint() {
                     @Override
                     public CustomColumnTypeMapper getValue() {
-                        //return new CustomColumnType();
-                       return new CustomDefaultColumnTypeMapper();
+                       // return new CustomColumnTypeMa();
+                         return new CustomDefaultColumnTypeMapper();
                     }
                 });
 
 
-                //copy only Schema
+        //copy Schema
         new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
-        System.out.println("schema");
+        System.out.println("Schema Done");
 
+
+        //TODO copy tables
+        /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
+        System.out.println("Issues: "+ issues);
+        if(!issues.isSevere()) {
+
+            new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
+        }*/
 
         //Script
-        List<String> script = new CreateCustomSchemaTool(connectorRepository).createDDLScript(SOURCE, "test");
+       /* List<String> script = new CreateCustomSchemaTool(connectorRepository).createDDLScript(SOURCE, "test");
         for (String s : script) {
 
             System.out.println(s);
-        }
-        System.out.println("End");
-
+        }*/
 
     }
 

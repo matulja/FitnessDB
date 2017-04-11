@@ -19,7 +19,7 @@ public final class CustomColumnNameFilter extends RepositoryColumnFilterHint{
             final String columnCase = column.getColumnName();
            // String regEx="^(e|c|o|sa|r|p)";
             return ((columnCase.startsWith("e"))||(columnCase.startsWith("c"))||(columnCase.startsWith("o"))||(columnCase.startsWith("sa"))
-             ||(columnCase.startsWith("r"))||(columnCase.startsWith("p")));
+             ||(columnCase.startsWith("r")) |(columnCase.startsWith("h")) ||(columnCase.startsWith("i"))||(columnCase.startsWith("p")));
         };
     }
 }

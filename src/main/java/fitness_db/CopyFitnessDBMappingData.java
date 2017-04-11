@@ -37,9 +37,6 @@ public class CopyFitnessDBMappingData {
         dropTablesTool.dropTables(TARGET);
 
 
-        //add Source & Target ConnectionInfo
-        connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfo());
-        connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfo());
 
         //add ConnectorHints and Mapping Data
 
@@ -79,7 +76,7 @@ public class CopyFitnessDBMappingData {
         new CreateSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
 
         //copy Tables
-        //new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
+        new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
 
         /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
 

@@ -1,12 +1,16 @@
 package fitness_db._MyTestDB.schema;
 
+import de.akquinet.jbosscc.guttenbase.connector.ConnectorInfo;
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
+import de.akquinet.jbosscc.guttenbase.defaults.impl.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.hints.CaseConversionMode;
 import de.akquinet.jbosscc.guttenbase.mapping.*;
 import de.akquinet.jbosscc.guttenbase.meta.*;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.tools.TableOrderTool;
 import fitness_db._MyTestDB.type_Column.CustomColumnTypeMapper;
+import fitness_db._MyTestDB.type_Column.CustomDefaultColumnTypeMapper;
+import org.h2.engine.Database;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -27,6 +31,7 @@ public class DatabaseCustomSchemaScriptCreator {
     public static final int MAX_ID_LENGTH = 64;
     private final DatabaseType sourceType=DatabaseType.MYSQL;
     private final DatabaseType targetType=DatabaseType.POSTGRESQL;
+
 
 
     private final DatabaseMetaData _sourceDatabaseMetaData;
@@ -265,10 +270,9 @@ public class DatabaseCustomSchemaScriptCreator {
 
         assert !tablename.contains(".") : "Invalid table name " + tablename;
 
-        String builder = "ALTER TABLE " + schemaPrefix + tablename + " ADD CONSTRAINT " + fkName +
+        return "ALTER TABLE " + schemaPrefix + tablename + " ADD CONSTRAINT " + fkName +
                 " FOREIGN KEY (" + columnNameMapper.mapColumnName(referencingColumn) + ") REFERENCES " + schemaPrefix +
                 tableNameMapper.mapTableName(referencedColumn.getTableMetaData()) + "(" + columnNameMapper.mapColumnName(referencedColumn) + ");";
-        return builder;
     }
 
     public String createForeignKey(final ForeignKeyMetaData foreignKeyMetaData) throws SQLException {
@@ -296,11 +300,13 @@ public class DatabaseCustomSchemaScriptCreator {
 
         //old ColumnType Mapper
         // final ColumnTypeMapper columnTypeMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnTypeMapper.class).getValue();
+        //TODO auf fefault value setzen
+
 
         final CustomColumnTypeMapper customColumnTypeMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, CustomColumnTypeMapper.class).getValue();
         final StringBuilder builder = new StringBuilder();
 
-        builder.append(columnNameMapper.mapColumnName(columnMetaData)).append(" ").append(customColumnTypeMapper.getColumnType(columnMetaData, sourceType, targetType));
+        builder.append(columnNameMapper.mapColumnName(columnMetaData)).append(" ").append(customColumnTypeMapper.mapColumnType(columnMetaData, sourceType, targetType));
 
         if (!columnMetaData.isNullable()) {
             builder.append(" NOT NULL");

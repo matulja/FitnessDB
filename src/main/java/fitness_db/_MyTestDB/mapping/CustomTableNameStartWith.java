@@ -29,10 +29,11 @@ public class CustomTableNameStartWith implements TableNameMapper
     public String mapTableName(final TableMetaData tableMetaData) {
 
         final String defaultTableName = tableMetaData.getTableName();
-        String tableName ="";
+        String tableName;
 
         if (defaultTableName.startsWith("o"))
-        {tableName= PREFIX + defaultTableName;
+        {
+            tableName= PREFIX + defaultTableName;
 
         }
 

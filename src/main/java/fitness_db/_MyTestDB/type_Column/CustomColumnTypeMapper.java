@@ -8,5 +8,5 @@ import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
  */
 public interface CustomColumnTypeMapper
 {
-  String getColumnType(final ColumnMetaData columnMetaData, final DatabaseType sourceDatabase, final DatabaseType targetDatabase );
+  String mapColumnType(final ColumnMetaData columnMetaData, final DatabaseType sourceDatabase, final DatabaseType targetDatabase );
 }

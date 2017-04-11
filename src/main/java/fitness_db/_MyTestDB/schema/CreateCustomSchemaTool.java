@@ -16,6 +16,7 @@ import java.util.List;
  *
  * @copyright akquinet tech@spree GmbH, 2002-2020
  */
+@SuppressWarnings("SameParameterValue")
 public class CreateCustomSchemaTool
 
 {
@@ -58,10 +59,5 @@ public class CreateCustomSchemaTool
 
         new ScriptExecutorTool(_connectorRepository).executeScript(targetConnectorId, ddlScript);
     }
-
-    public static void main(final String[] args) throws SQLException {
-
-    }
-
 }
 
