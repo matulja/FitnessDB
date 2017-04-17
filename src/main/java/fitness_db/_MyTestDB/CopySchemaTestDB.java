@@ -1,33 +1,22 @@
 package fitness_db._MyTestDB;
 
-import de.akquinet.jbosscc.guttenbase.connector.ConnectorInfo;
-import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnNameMapperHint;
-import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.TableNameMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
-import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
-import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
-import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
-
-import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
-import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
 import fitness_db._MyTestDB.connInfo.MyPostgreConnetionsInfoTest;
 import fitness_db._MyTestDB.connInfo.MySqlConnectionsInfoTest;
-import fitness_db._MyTestDB.mapping.*;
-import fitness_db._MyTestDB.schema.CreateCustomSchemaTool;
+import fitness_db._MyTestDB.mapping.CustomColumnNameFilter;
+import fitness_db._MyTestDB.mapping.CustomColumnRenameName;
+import fitness_db._MyTestDB.mapping.CustomTableNameFilter;
+import fitness_db._MyTestDB.mapping.CustomTableRenameName;
 import fitness_db._MyTestDB.type_Column.CustomColumnTypeMapper;
 import fitness_db._MyTestDB.type_Column.CustomColumnTypeMapperHint;
 import fitness_db._MyTestDB.type_Column.CustomDefaultColumnTypeMapper;
-import org.apache.log4j.Logger;
 
-import java.lang.annotation.Target;
 import java.sql.SQLException;
-import java.util.List;
 
 
 /**
@@ -94,7 +83,7 @@ public class CopySchemaTestDB {
 
 
         //copy Schema
-        new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+       // new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
         System.out.println("Schema Done");
 
 
