@@ -7,11 +7,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="FitnessDB" />
+        <module name="GuttenBase" />
         <module name="MyTest_DB" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="FitnessDB" target="1.8" />
+      <module name="GuttenBase" target="1.8" />
       <module name="MyTest_DB" target="1.8" />
     </bytecodeTargetLevel>
   </component>

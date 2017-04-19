@@ -15,7 +15,7 @@ import java.sql.SQLException;
  */
 public class MappingTableName implements TableNameMapper, TableMapper{
     @Override
-    public String mapTableName(final TableMetaData sourceTableMetaData) throws SQLException {
+    public String mapTableName(final TableMetaData sourceTableMetaData, DatabaseMetaData databaseMetaData) throws SQLException {
 
         return "tab_" + sourceTableMetaData.getTableName();
     }
@@ -23,7 +23,7 @@ public class MappingTableName implements TableNameMapper, TableMapper{
     @Override
     public TableMetaData map(TableMetaData source, DatabaseMetaData targetDatabaseMetaData) throws SQLException {
 
-        final String mappedTableName= mapTableName(source);
+        final String mappedTableName= mapTableName(source, targetDatabaseMetaData);
         return targetDatabaseMetaData.getTableMetaData(mappedTableName);
     }
 

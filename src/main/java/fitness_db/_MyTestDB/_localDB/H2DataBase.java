@@ -18,6 +18,7 @@ import java.util.List;
 public class H2DataBase {
 
     private static final String CONNECTOR_ID = "hsqldb";
+    private static final String TARGET_ID = "target";
     private static String table_name= "";
 
 
@@ -25,6 +26,7 @@ public class H2DataBase {
 
         final ConnectorRepository _connectorRepository = new ConnectorRepositoryImpl();
         _connectorRepository.addConnectionInfo(CONNECTOR_ID, new H2ConnectionInfo());
+        _connectorRepository.addConnectionInfo(TARGET_ID, new H2ConnectionInfo());
 
         // add MappingColumnNameFilter -->  copy only columns starts with "FOO"
 
@@ -57,7 +59,7 @@ public class H2DataBase {
       // new ScriptExecutorTool(_connectorRepository).executeFileScript(CONNECTOR_ID,true, false, "/ddl/tables.sql");
         System.out.println("ScriptExecutorTool");
         //Script
-        List< String > script = new CreateCustomSchemaTool(_connectorRepository).createDDLScript(CONNECTOR_ID, "test");
+        List< String > script = new CreateCustomSchemaTool(_connectorRepository).createDDLScript(CONNECTOR_ID, TARGET_ID);
         for (String s : script) {
 
             System.out.println(s);
