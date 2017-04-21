@@ -2,6 +2,7 @@ package fitness_db._MyTestDB.mapping;
 
 import de.akquinet.jbosscc.guttenbase.hints.CaseConversionMode;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
+import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 
 /**
@@ -17,13 +18,15 @@ import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 public class CustomTableName implements TableNameMapper
 {
   private final CaseConversionMode _caseConversionMode;
-  public static final String Nr_PREFIX = "_";
+  private final boolean _addSchema;
+  private String tab= "_Nr";
 
 
   public CustomTableName(final CaseConversionMode caseConversionMode, final boolean addSchema)
   {
     assert caseConversionMode != null : "caseConversionMode != null";
     _caseConversionMode = caseConversionMode;
+      _addSchema = addSchema;
 
   }
 
@@ -33,11 +36,19 @@ public class CustomTableName implements TableNameMapper
   }
 
   @Override
-  public String mapTableName(final TableMetaData tableMetaData) {
+  public String mapTableName(final TableMetaData sourceTableMetaData, final DatabaseMetaData targetDatabaseMetaData) {
 
-    String tableName = _caseConversionMode.convert(tableMetaData.getTableName());
-    return Nr_PREFIX + tableName;
+      final String schema = targetDatabaseMetaData.getSchema();
+      final String table = _caseConversionMode.convert(sourceTableMetaData.getTableName());
 
+      if ("".equals(schema.trim()) || !_addSchema)
+      {
+          return table + tab;
+      }
+      else
+      {
+          return schema + "." + table + tab;
+      }
   }
-
 }
+

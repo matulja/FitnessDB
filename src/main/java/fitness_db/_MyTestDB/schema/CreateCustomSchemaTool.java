@@ -37,11 +37,11 @@ public class CreateCustomSchemaTool
         this(connectorRepository, DatabaseSchemaScriptCreator.MAX_ID_LENGTH);
     }
 
-    public List<String> createDDLScript(final String connectorId, final String targetSchema) throws SQLException
+    public List<String> createDDLScript(final String connectorId, final String targetConnectorId) throws Exception
     {
         final List<String> result = new ArrayList<>();
         final DatabaseCustomSchemaScriptCreator databaseCustomSchemaScriptCreator = new DatabaseCustomSchemaScriptCreator(_connectorRepository, connectorId,
-                targetSchema, _maxIdLength);
+                targetConnectorId, _maxIdLength);
 
         result.addAll( databaseCustomSchemaScriptCreator.createTableStatements());
         result.addAll( databaseCustomSchemaScriptCreator.createPrimaryKeyStatements());
@@ -51,12 +51,9 @@ public class CreateCustomSchemaTool
         return result;
     }
 
-    public void copySchema(final String sourceConnectorId, final String targetConnectorId) throws SQLException
+    public void copySchema(final String sourceConnectorId, final String targetConnectorId) throws Exception
     {
-        final DatabaseMetaData databaseMetaData = _connectorRepository.getDatabaseMetaData(targetConnectorId);
-
-        final List<String> ddlScript = createDDLScript(sourceConnectorId, databaseMetaData.getSchema());
-
+        final List<String> ddlScript = createDDLScript(sourceConnectorId, targetConnectorId);
         new ScriptExecutorTool(_connectorRepository).executeScript(targetConnectorId, ddlScript);
     }
 }

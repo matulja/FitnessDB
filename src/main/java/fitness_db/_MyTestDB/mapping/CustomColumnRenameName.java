@@ -25,7 +25,7 @@ public class CustomColumnRenameName implements ColumnNameMapper{
     private final Map<String, String> replacementsColumns = new HashMap<>();
 
     @Override
-    public String mapColumnName(ColumnMetaData columnMetaData) throws SQLException {
+    public String mapColumnName(ColumnMetaData columnMetaData){
 
         final String defaultColumnName = columnMetaData.getColumnName();
         final String columnName = replacementsColumns.get(defaultColumnName);

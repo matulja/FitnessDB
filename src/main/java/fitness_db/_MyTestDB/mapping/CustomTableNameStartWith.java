@@ -2,6 +2,7 @@ package fitness_db._MyTestDB.mapping;
 
 import de.akquinet.jbosscc.guttenbase.hints.CaseConversionMode;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
+import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 
 /**
@@ -26,7 +27,7 @@ public class CustomTableNameStartWith implements TableNameMapper
     }
 
     @Override
-    public String mapTableName(final TableMetaData tableMetaData) {
+    public String mapTableName(final TableMetaData tableMetaData, final DatabaseMetaData databaseMetaData) {
 
         final String defaultTableName = tableMetaData.getTableName();
         String tableName;

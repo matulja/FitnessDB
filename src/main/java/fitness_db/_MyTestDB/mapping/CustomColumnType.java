@@ -1,5 +1,6 @@
 package fitness_db._MyTestDB.mapping;
 
+import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeResolverListHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeResolverList;
@@ -14,9 +15,8 @@ import java.util.Arrays;
  * Created by mfehler on 10.04.17.
  */
 public class CustomColumnType implements ColumnTypeMapper {
-
     @Override
-    public String getColumnType(ColumnMetaData columnMetaData) {
+    public String getColumnType(ColumnMetaData columnMetaData, DatabaseType sourceDatabase, DatabaseType targetDatabase) {
         switch (columnMetaData.getColumnTypeName().toUpperCase()) {
             case "MEDIUMTEXT":
                 return "VARCHAR(1024)";
@@ -26,6 +26,5 @@ public class CustomColumnType implements ColumnTypeMapper {
                 return columnMetaData.getColumnTypeName();
         }
     }
-
 }
 

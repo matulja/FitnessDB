@@ -16,7 +16,7 @@ public class CustomTableNameFilter extends RepositoryTableFilterHint {
         return table -> {
 
             final String tableCase=table.getTableName();
-            return tableCase.startsWith("o")||tableCase.startsWith ("p")||tableCase.startsWith ("c") ||tableCase.startsWith ("e") ;
+            return tableCase.startsWith("o")||tableCase.startsWith ("p")||tableCase.startsWith ("c") ||tableCase.startsWith ("i")||tableCase.startsWith ("e")  ;
         };
     }
 }

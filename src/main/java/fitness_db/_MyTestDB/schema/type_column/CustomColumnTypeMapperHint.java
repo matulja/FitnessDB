@@ -1,4 +1,4 @@
-package fitness_db._MyTestDB.type_Column;
+package fitness_db._MyTestDB.schema.type_column;
 
 import de.akquinet.jbosscc.guttenbase.hints.ConnectorHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;

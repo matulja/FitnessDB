@@ -1,12 +1,9 @@
 package fitness_db._MyTestDB._localDB;
 
 import de.akquinet.jbosscc.guttenbase.hints.ColumnNameMapperHint;
-import de.akquinet.jbosscc.guttenbase.hints.TableNameMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
-import de.akquinet.jbosscc.guttenbase.tools.ScriptExecutorTool;
 import fitness_db._MyTestDB.mapping.CustomColumnRenameName;
 import fitness_db._MyTestDB.schema.CreateCustomSchemaTool;
 

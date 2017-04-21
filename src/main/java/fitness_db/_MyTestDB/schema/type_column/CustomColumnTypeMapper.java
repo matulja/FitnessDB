@@ -1,4 +1,4 @@
-package fitness_db._MyTestDB.type_Column;
+package fitness_db._MyTestDB.schema.type_column;
 
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
@@ -8,5 +8,5 @@ import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
  */
 public interface CustomColumnTypeMapper
 {
-  String mapColumnType(final ColumnMetaData columnMetaData, final DatabaseType sourceDatabase, final DatabaseType targetDatabase );
+  String mapColumnType(final ColumnMetaData columnMetaData, final DatabaseType sourceDatabase, final DatabaseType targetDatabase) throws Exception;
 }
