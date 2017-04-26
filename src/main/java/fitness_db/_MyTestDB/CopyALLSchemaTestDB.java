@@ -38,40 +38,31 @@ public class CopyALLSchemaTestDB {
 
 
         //from postgres to sql
-      // connectorRepository.addConnectionInfo(SOURCE, new MyPostgreConnetionsInfoTest());
-      // connectorRepository.addConnectionInfo(TARGET, new MySqlConnectionsInfoTest());
+        //connectorRepository.addConnectionInfo(SOURCE, new MyPostgreConnetionsInfoTest());
+        // connectorRepository.addConnectionInfo(TARGET, new MySqlConnectionsInfoTest());
 
-
-        //delete the tables
-        //DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
-        //dropTablesTool.dropIndexes(TARGET);
-       // dropTablesTool.dropForeignKeys(TARGET);
-        //dropTablesTool.dropTables(TARGET);
 
         //add  ColumnType  --> replace columnType
         connectorRepository.addConnectorHint(SOURCE, new CustomColumnTypeMapperHint() {
                     @Override
                     public CustomColumnTypeMapper getValue() {
-                         return new CustomDefaultColumnTypeMapper(DatabaseType.MYSQL, DatabaseType.H2DB);
+                         return new CustomDefaultColumnTypeMapper(DatabaseType.MYSQL, DatabaseType.POSTGRESQL);
                     }
                 });
 
         //copy Schema
         List<String> script = new CreateCustomSchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
-        for (String s : script) {
+        for (String s : script) {System.out.println(s);}
 
-            System.out.println(s);
-        }
-
-        //new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+        new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
         System.out.println("Schema Done");
 
-        /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
+        SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("Issues: "+ issues);
         if(!issues.isSevere()) {
 
             new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
-        }*/
+        }
 
     }
 

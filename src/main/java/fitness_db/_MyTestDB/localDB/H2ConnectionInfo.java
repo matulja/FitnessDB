@@ -1,4 +1,4 @@
-package fitness_db._MyTestDB._localDB;
+package fitness_db._MyTestDB.localDB;
 
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.connector.impl.URLConnectorInfoImpl;

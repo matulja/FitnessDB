@@ -1,12 +1,11 @@
-package fitness_db._MyTestDB._test.customSchema;
+package fitness_db._MyTestDB._test;
 
 
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.sql.SQLLexer;
 import de.akquinet.jbosscc.guttenbase.tools.ScriptExecutorTool;
-import fitness_db._MyTestDB._test.AbstractGuttenBaseTest;
-import fitness_db._MyTestDB._test._configuration.TestDerbyConnectionInfo;
-import fitness_db._MyTestDB._test._configuration.TestH2ConnectionInfo;
+import fitness_db._MyTestDB._test.configuration.TestDerbyConnectionInfo;
+import fitness_db._MyTestDB._test.configuration.TestH2ConnectionInfo;
 import fitness_db._MyTestDB.schema.CreateCustomSchemaTool;
 import fitness_db._MyTestDB.schema.type_column.CustomColumnTypeMapper;
 import fitness_db._MyTestDB.schema.type_column.CustomColumnTypeMapperHint;
@@ -30,8 +29,8 @@ public class CreateCustomSchemaToolTest extends AbstractGuttenBaseTest
   {
     _connectorRepository.addConnectionInfo(source_CONNECTOR_ID, new TestH2ConnectionInfo());
     _connectorRepository.addConnectionInfo(target_CONNECTOR_ID, new TestDerbyConnectionInfo());
-    new ScriptExecutorTool(_connectorRepository).executeFileScript(source_CONNECTOR_ID, "/ddl/tables_h2.sql");
-    new ScriptExecutorTool(_connectorRepository).executeFileScript(target_CONNECTOR_ID, "/ddl/tables_derby.sql");
+    new ScriptExecutorTool(_connectorRepository).executeFileScript(source_CONNECTOR_ID, "/ddl/tables-h2.sql");
+    new ScriptExecutorTool(_connectorRepository).executeFileScript(target_CONNECTOR_ID, "/ddl/tables-derby.sql");
 
     _connectorRepository.addConnectorHint(source_CONNECTOR_ID, new CustomColumnTypeMapperHint() {
       @Override

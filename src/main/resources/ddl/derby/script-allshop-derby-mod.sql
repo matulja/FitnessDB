@@ -24,10 +24,14 @@ CREATE TABLE products
   productline VARCHAR(50) NOT NULL,
   productscale VARCHAR(10) NOT NULL,
   productvendor VARCHAR(50) NOT NULL,
-  productdescription CLOB NOT NULL,
-  quantityinstock SMALLINT NOT NULL,
-  buyprice DECIMAL NOT NULL,
-  msrp DECIMAL NOT NULL
+  productdescription VARCHAR(50),
+  quantityinstock VARCHAR(50) NOT NULL,
+  buyprice VARCHAR(50) NOT NULL,
+  msrp VARCHAR(50) NOT NULL
+);
+CREATE TABLE test_table
+(
+  test_2 INT NOT NULL
 );
 CREATE TABLE customers
 (
@@ -36,11 +40,14 @@ CREATE TABLE customers
   contactlastname VARCHAR(50) NOT NULL,
   contactfirstname VARCHAR(50) NOT NULL,
   phone VARCHAR(50) NOT NULL,
+  addressline1 VARCHAR(50) NOT NULL,
+  addressline2 VARCHAR(50),
   city VARCHAR(50) NOT NULL,
+  state VARCHAR(50),
   postalcode VARCHAR(15),
   country VARCHAR(50) NOT NULL,
   salesrepemployeenumber INT,
-  creditlimit DECIMAL
+  creditlimit VARCHAR(50)
 );
 CREATE TABLE orders
 (
@@ -49,7 +56,7 @@ CREATE TABLE orders
   requireddate DATE NOT NULL,
   shippeddate DATE,
   status VARCHAR(15) NOT NULL,
-  comments CLOB,
+  comments VARCHAR(50),
   customernumber INT NOT NULL
 );
 CREATE TABLE orderdetails
@@ -57,7 +64,7 @@ CREATE TABLE orderdetails
   ordernumber INT NOT NULL,
   productcode VARCHAR(15) NOT NULL,
   quantityordered INT NOT NULL,
-  priceeach DECIMAL NOT NULL,
+  priceeach VARCHAR(50) NOT NULL,
   orderlinenumber SMALLINT NOT NULL
 );
 CREATE TABLE payments
@@ -65,16 +72,26 @@ CREATE TABLE payments
   customernumber INT NOT NULL,
   checknumber VARCHAR(50) NOT NULL,
   paymentdate DATE NOT NULL,
-  amount DECIMAL NOT NULL
+  amount VARCHAR(50) NOT NULL
 );
 CREATE TABLE employees
 (
   employeenumber INT NOT NULL,
+  lastname VARCHAR(50) NOT NULL,
+  firstname VARCHAR(50) NOT NULL,
   extension VARCHAR(10) NOT NULL,
   email VARCHAR(100) NOT NULL,
   officecode VARCHAR(10) NOT NULL,
-  reportsto INT
+  reportsto INT,
+  jobtitle VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE FOO_DATA
+(
+   ID bigint, -- PRIMARY KEY
+   SOME_DATA BLOB
+);
+
 ALTER TABLE customers ADD CONSTRAINT PK_customers_1 PRIMARY KEY (customernumber);
 ALTER TABLE employees ADD CONSTRAINT PK_employees_1 PRIMARY KEY (employeenumber);
 ALTER TABLE offices ADD CONSTRAINT PK_offices_1 PRIMARY KEY (officecode);
@@ -83,6 +100,7 @@ ALTER TABLE orders ADD CONSTRAINT PK_orders_1 PRIMARY KEY (ordernumber);
 ALTER TABLE payments ADD CONSTRAINT PK_payments_1 PRIMARY KEY (customernumber, checknumber);
 ALTER TABLE productlines ADD CONSTRAINT PK_productlines_1 PRIMARY KEY (productline);
 ALTER TABLE products ADD CONSTRAINT PK_products_1 PRIMARY KEY (productcode);
+ALTER TABLE test_table ADD CONSTRAINT PK_test_table_1 PRIMARY KEY (test_2);
 ALTER TABLE customers ADD CONSTRAINT FK_customers_salesrepemployeenumber_employeenumber_1 FOREIGN KEY (salesrepemployeenumber) REFERENCES employees(employeenumber);
 ALTER TABLE employees ADD CONSTRAINT FK_employees_officecode_officecode_1 FOREIGN KEY (officecode) REFERENCES offices(officecode);
 ALTER TABLE employees ADD CONSTRAINT FK_employees_reportsto_employeenumber_2 FOREIGN KEY (reportsto) REFERENCES employees(employeenumber);
@@ -137,4 +155,8 @@ CREATE UNIQUE INDEX IDX_IDX_IDX_PRIMARY_PRODUCTS_3_PRODUCTS_3_products_3 ON prod
 CREATE UNIQUE INDEX IDX_IDX_PK_PRODUCTS_1_PRODUCTS_4_products_4 ON products(productcode);
 CREATE UNIQUE INDEX IDX_PRIMARY_products_5 ON products(productcode);
 CREATE INDEX IDX_IDXIDXI_ID_RDCTINEPROUCTS_2_PROUCT_PRDUC_4PROUCTS_products_6 ON products(productline);
-
+CREATE UNIQUE INDEX IDX_IDXDX_IDX_IDX_PMAYS_ABLE_1_TE_BE_ETALE__TEST_TABE1_tst_ble_1 ON test_table(test_2);
+CREATE UNIQUE INDEX IDX_IDX_IDX_PRIMARY_TEST_TABLE_3_TEST_TABLE_3_test_table_2 ON test_table(test_2);
+CREATE UNIQUE INDEX IDX_IDX_IIDXPKTESTBLE_1_TES_ALE2TEST_TBE2_TESTTBL_2_test_table_3 ON test_table(test_2);
+CREATE UNIQUE INDEX IDX_IDX_PK_TEST_TABLE_1_TEST_TABLE_4_test_table_4 ON test_table(test_2);
+CREATE UNIQUE INDEX IDX_PRIMARY_test_table_5 ON test_table(test_2);

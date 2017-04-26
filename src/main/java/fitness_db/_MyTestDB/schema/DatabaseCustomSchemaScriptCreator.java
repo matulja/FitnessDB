@@ -283,7 +283,7 @@ public class DatabaseCustomSchemaScriptCreator {
 
     private String createColumn(final ColumnMetaData columnMetaData) throws Exception {
 
-        final ColumnNameMapper columnNameMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, ColumnNameMapper.class).getValue();
+        final ColumnNameMapper columnNameMapper = _connectorRepository.getConnectorHint(_targetConnectorId, ColumnNameMapper.class).getValue();
         final CustomColumnTypeMapper customColumnTypeMapper = _connectorRepository.getConnectorHint(_sourceConnectorId, CustomColumnTypeMapper.class).getValue();
         final StringBuilder builder = new StringBuilder();
 

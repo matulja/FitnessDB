@@ -1,9 +1,13 @@
 package fitness_db._MyTestDB;
 
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
+import de.akquinet.jbosscc.guttenbase.hints.ColumnMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnNameMapperHint;
+import de.akquinet.jbosscc.guttenbase.hints.TableMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.TableNameMapperHint;
+import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
+import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
@@ -21,7 +25,6 @@ import fitness_db._MyTestDB.schema.type_column.CustomColumnTypeMapper;
 import fitness_db._MyTestDB.schema.type_column.CustomColumnTypeMapperHint;
 import fitness_db._MyTestDB.schema.type_column.CustomDefaultColumnTypeMapper;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -36,58 +39,64 @@ public class CopyFilterSchemaTestDB {
 
     public static void main(final String[] args) throws Exception {
 
-        //Repository initialisieren
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
-
-        //add Source & Target ConnectionInfo
-       // connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfoTest());
-        //connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfoTest());
+        connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfoTest());
+        connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfoTest());
 
         //from postgres to sql
-        connectorRepository.addConnectionInfo(SOURCE, new MyPostgreConnetionsInfoTest());
-        connectorRepository.addConnectionInfo(TARGET, new MySqlConnectionsInfoTest());
+        //connectorRepository.addConnectionInfo(SOURCE, new MyPostgreConnetionsInfoTest());
+        //connectorRepository.addConnectionInfo(TARGET, new MySqlConnectionsInfoTest());
 
 
-        //delete the tables
-        //DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
-        //dropTablesTool.dropIndexes(TARGET);
-       // dropTablesTool.dropForeignKeys(TARGET);
-        //dropTablesTool.dropTables(TARGET);
-
-
-        //add Mapping TableFilter -->  copy only tables starts with " "
+        //add Mapping TableFilter
         connectorRepository.addConnectorHint(SOURCE,new CustomTableNameFilter());
         connectorRepository.addConnectorHint(TARGET,new CustomTableNameFilter());
 
-        //add Mapping ColumnFilter --> copy tables starts with some value
+        //add Mapping ColumnFilter
+        connectorRepository.addConnectorHint(SOURCE,new CustomColumnNameFilter());
+        connectorRepository.addConnectorHint(TARGET,new CustomColumnNameFilter());
 
-       connectorRepository.addConnectorHint(SOURCE,new CustomColumnNameFilter());
-       connectorRepository.addConnectorHint(TARGET,new CustomColumnNameFilter());
-
-
-        //add Mapping ColumnName --> rename Columns Name
-        connectorRepository.addConnectorHint(SOURCE, new ColumnNameMapperHint() {
+        //add MappingColumn  --> rename columns
+        connectorRepository.addConnectorHint(TARGET, new ColumnMapperHint() {
             @Override
-            public ColumnNameMapper getValue() {
-                return new CustomColumnRenameName().addReplacement("", "");
+            public ColumnMapper getValue() {
+                return new CustomColumnRenameName()
+                        .addReplacement("officecode", "id_officecode")
+                        .addReplacement("ordernumber", "id_ordernumber")
+                        .addReplacement("phone", "id_phone")
+                        .addReplacement("city", "id_city");
             }
         });
         connectorRepository.addConnectorHint(TARGET, new ColumnNameMapperHint() {
             @Override
             public ColumnNameMapper getValue() {
-                return new CustomColumnRenameName().addReplacement("", "");
+                return new CustomColumnRenameName()
+                        .addReplacement("officecode", "id_officecode")
+                        .addReplacement("ordernumber", "id_ordernumber")
+                        .addReplacement("phone", "id_phone")
+                        .addReplacement("city", "id_city");
             }
         });
 
         //add MappingTable  --> rename tables
-
+        connectorRepository.addConnectorHint(TARGET, new TableMapperHint() {
+            @Override
+            public TableMapper getValue() {
+                return new CustomTableRenameName()
+                        .addReplacement("offices", "tab_offices")
+                        .addReplacement("orders", "tab_orders")
+                        .addReplacement("orderdetails", "tab_ordersdetails");
+            }
+        });
         connectorRepository.addConnectorHint(TARGET, new TableNameMapperHint() {
             @Override
             public TableNameMapper getValue() {
-                return new CustomTableRenameName().addReplacement("", "");
+                return new CustomTableRenameName()
+                        .addReplacement("offices", "tab_offices")
+                        .addReplacement("orders", "tab_orders")
+                        .addReplacement("orderdetails", "tab_ordersdetails");
             }
         });
-
 
 
 
@@ -95,31 +104,23 @@ public class CopyFilterSchemaTestDB {
         connectorRepository.addConnectorHint(SOURCE, new CustomColumnTypeMapperHint() {
                     @Override
                     public CustomColumnTypeMapper getValue() {
-                         return new CustomDefaultColumnTypeMapper(DatabaseType.POSTGRESQL, DatabaseType.MYSQL);
+                         return new CustomDefaultColumnTypeMapper(DatabaseType.MYSQL, DatabaseType.POSTGRESQL);
                     }
                 });
 
 
-
-
-        //copy Schema
         List<String> script = new CreateCustomSchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
-        for (String s : script) {
+        for (String s : script) {System.out.println(s);}
 
-            System.out.println(s);
-        }
-        //new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+        new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
         System.out.println("Schema Done");
 
-
-        //TODO copy tables
         SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("Issues: "+ issues);
         if(!issues.isSevere()) {
 
             new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
         }
-
 
 
     }

@@ -1,4 +1,4 @@
-package fitness_db._MyTestDB._localDB;
+package fitness_db._MyTestDB.localDB;
 
 import de.akquinet.jbosscc.guttenbase.hints.ColumnNameMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;

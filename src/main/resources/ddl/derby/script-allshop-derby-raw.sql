@@ -85,6 +85,13 @@ CREATE TABLE employees
   reportsto INT,
   jobtitle VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE FOO_DATA
+(
+   ID bigint, -- PRIMARY KEY
+   SOME_DATA BLOB
+);
+
 ALTER TABLE customers ADD CONSTRAINT PK_customers_1 PRIMARY KEY (customernumber);
 ALTER TABLE employees ADD CONSTRAINT PK_employees_1 PRIMARY KEY (employeenumber);
 ALTER TABLE offices ADD CONSTRAINT PK_offices_1 PRIMARY KEY (officecode);

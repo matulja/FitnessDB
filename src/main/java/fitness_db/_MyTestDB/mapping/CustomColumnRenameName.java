@@ -1,16 +1,15 @@
 package fitness_db._MyTestDB.mapping;
 
+import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import de.akquinet.jbosscc.guttenbase.hints.TableOrderHint;
+import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
 import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 /**
@@ -20,29 +19,40 @@ import java.util.Map;
  *
  */
 
-public class CustomColumnRenameName implements ColumnNameMapper{
+public class CustomColumnRenameName implements ColumnNameMapper, ColumnMapper{
 
     private final Map<String, String> replacementsColumns = new HashMap<>();
 
     @Override
+    public ColumnMapperResult map(ColumnMetaData source, TableMetaData targetTableMetaData) throws SQLException {
+
+        final String defaultColumnName = source.getColumnName();
+
+        final String columnName = replacementsColumns.containsKey(defaultColumnName)?
+                replacementsColumns.get(defaultColumnName): defaultColumnName;
+
+        final ColumnMetaData columnMetaData2 = targetTableMetaData.getColumnMetaData(columnName);
+        return new ColumnMapperResult(Arrays.asList(columnMetaData2));
+
+    }
+
+    @Override
     public String mapColumnName(ColumnMetaData columnMetaData){
 
-        final String defaultColumnName = columnMetaData.getColumnName();
-        final String columnName = replacementsColumns.get(defaultColumnName);
+        String result = columnMetaData.getColumnName();
+        final String columnName = replacementsColumns.get(result);
 
         if(columnName == null)
-            return defaultColumnName;
+            return result;
         else
             return columnName;
     }
 
     public CustomColumnRenameName addReplacement(final String sourceComn, final String targetColumn){
         replacementsColumns.put(sourceComn, targetColumn);
-
-        replacementsColumns.put("officecode", "id_officecode");
-        replacementsColumns.put("city", "id_city");
-        return  this;
+        return this;
     }
+
 }
 
 

@@ -1,6 +1,7 @@
 package fitness_db._MyTestDB.mapping;
 
 import de.akquinet.jbosscc.guttenbase.hints.CaseConversionMode;
+import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
@@ -11,62 +12,65 @@ import java.util.Map;
 
 /**
  * look at columnName starts with some value and replace them
- *
+ * <p>
  * <p>
  * &copy; 2012-2020 akquinet tech@spree
  * </p>
  *
  * @author M. Dahm
  */
-public class CustomTableRenameName implements TableNameMapper {
+public class CustomTableRenameName implements TableNameMapper, TableMapper {
 
 
-  private final Map<String, String> replacementsTables = new HashMap<>();
-  private final CaseConversionMode _caseConversionMode;
-  private final boolean _addSchema;
+    private final Map<String, String> replacementsTables = new HashMap<>();
+    private final CaseConversionMode _caseConversionMode;
+    private final boolean _addSchema;
 
 
-  public CustomTableRenameName(final CaseConversionMode caseConversionMode, final boolean addSchema) {
-    assert caseConversionMode != null : "caseConversionMode != null";
-    _caseConversionMode = caseConversionMode;
-    _addSchema = addSchema;
+    public CustomTableRenameName(final CaseConversionMode caseConversionMode, final boolean addSchema) {
+        assert caseConversionMode != null : "caseConversionMode != null";
+        _caseConversionMode = caseConversionMode;
+        _addSchema = addSchema;
 
-  }
-
-  public CustomTableRenameName() {
-    this(CaseConversionMode.NONE, true);
-  }
-
-
-  @Override
-  public String mapTableName(final TableMetaData sourceTableMetaData, final DatabaseMetaData targetDatabaseMetaData) throws SQLException {
-
-    final String schema = targetDatabaseMetaData.getSchema();
-    final String defaultTableName = _caseConversionMode.convert(sourceTableMetaData.getTableName());
-    final String tableName = replacementsTables.get(defaultTableName);
-
-    if ("".equals(schema.trim()) || !_addSchema && (tableName==null)) {
-      return defaultTableName;
+        //addReplacement("offices", "tab_offices");
+        //addReplacement("orders", "tab_orders");
+       // addReplacement("orderdetails", "tab_ordersdetails");
     }
 
-    else if ("".equals(schema.trim()) || !_addSchema ) {
-      return tableName;
+    public CustomTableRenameName() {
+        this(CaseConversionMode.NONE, true);
     }
 
-    else if (tableName==null) {
-      return schema + "." + defaultTableName;
-    }
-    else {
-      return schema + "." + tableName;
+    @Override
+    public TableMetaData map(TableMetaData source, DatabaseMetaData targetDatabaseMetaData) throws SQLException {
+        final String defaultTableName = _caseConversionMode.convert(source.getTableName());
+        final String tableName = replacementsTables.containsKey(defaultTableName)?
+                replacementsTables.get(defaultTableName): defaultTableName;
+
+        return targetDatabaseMetaData.getTableMetaData(tableName);
     }
 
-  }
+    @Override
+    public String mapTableName(final TableMetaData sourceTableMetaData, final DatabaseMetaData targetDatabaseMetaData) throws SQLException {
 
-  public CustomTableRenameName addReplacement(final String sourceTable, final String targetTable){
-    replacementsTables.put(sourceTable, targetTable);
-    replacementsTables.put("offices", "tab_offices");
-    replacementsTables.put("orders", "tab_orders");
-    replacementsTables.put("orderdetails", "tab_ordersdetails");
-    return this;
-  }
+        String result = _caseConversionMode.convert(sourceTableMetaData.getTableName());
+        final String schema = targetDatabaseMetaData.getSchema();
+        final String tableName = replacementsTables.get(result);
+
+        if(tableName != null) {
+            result = _caseConversionMode.convert(tableName);
+        }
+
+        if ("".equals(schema.trim())|| !_addSchema)  {
+            return result;
+        } else {
+            return schema + "." + result;
+        }
+    }
+
+    public CustomTableRenameName addReplacement(final String sourceTable, final String targetTable) {
+        replacementsTables.put(sourceTable, targetTable);
+
+        return this;
+    }
 }

@@ -2,7 +2,7 @@ CREATE TABLE tab_offices
 (
   officecode VARCHAR(10) NOT NULL,
   id_city VARCHAR(50) NOT NULL,
-  phone VARCHAR(50) NOT NULL,
+  id_phone VARCHAR(50) NOT NULL,
   addressline1 VARCHAR(50) NOT NULL,
   addressline2 VARCHAR(50),
   state VARCHAR(50),
@@ -24,10 +24,10 @@ CREATE TABLE products
   productline VARCHAR(50) NOT NULL,
   productscale VARCHAR(10) NOT NULL,
   productvendor VARCHAR(50) NOT NULL,
-  productdescription CLOB NOT NULL,
-  quantityinstock SMALLINT NOT NULL,
-  buyprice DECIMAL NOT NULL,
-  msrp DECIMAL NOT NULL
+  productdescription VARCHAR(50),
+  quantityinstock VARCHAR(50) NOT NULL,
+  buyprice VARCHAR(50) NOT NULL,
+  msrp VARCHAR(50) NOT NULL
 );
 CREATE TABLE test_table
 (
@@ -39,7 +39,7 @@ CREATE TABLE customers
   customername VARCHAR(50) NOT NULL,
   contactlastname VARCHAR(50) NOT NULL,
   contactfirstname VARCHAR(50) NOT NULL,
-  phone VARCHAR(50) NOT NULL,
+  id_phone VARCHAR(50) NOT NULL,
   addressline1 VARCHAR(50) NOT NULL,
   addressline2 VARCHAR(50),
   id_city VARCHAR(50) NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE customers
   postalcode VARCHAR(15),
   country VARCHAR(50) NOT NULL,
   salesrepemployeenumber INT,
-  creditlimit DECIMAL
+  creditlimit VARCHAR(50)
 );
 CREATE TABLE tab_orders
 (
@@ -56,15 +56,15 @@ CREATE TABLE tab_orders
   requireddate DATE NOT NULL,
   shippeddate DATE,
   status VARCHAR(15) NOT NULL,
-  comments CLOB,
+  comments VARCHAR(50),
   customernumber INT NOT NULL
 );
-CREATE TABLE tab_orderdetails
+CREATE TABLE orderdetails
 (
   ordernumber INT NOT NULL,
   productcode VARCHAR(15) NOT NULL,
   quantityordered INT NOT NULL,
-  priceeach DECIMAL NOT NULL,
+  priceeach VARCHAR(50) NOT NULL,
   orderlinenumber SMALLINT NOT NULL
 );
 CREATE TABLE payments
@@ -72,7 +72,7 @@ CREATE TABLE payments
   customernumber INT NOT NULL,
   checknumber VARCHAR(50) NOT NULL,
   paymentdate DATE NOT NULL,
-  amount DECIMAL NOT NULL
+  amount VARCHAR(50) NOT NULL
 );
 CREATE TABLE employees
 (
@@ -85,10 +85,17 @@ CREATE TABLE employees
   reportsto INT,
   jobtitle VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE FOO_DATA
+(
+   ID bigint, -- PRIMARY KEY
+   SOME_DATA BLOB
+);
+
 ALTER TABLE customers ADD CONSTRAINT PK_customers_1 PRIMARY KEY (customernumber);
 ALTER TABLE employees ADD CONSTRAINT PK_employees_1 PRIMARY KEY (employeenumber);
 ALTER TABLE tab_offices ADD CONSTRAINT PK_offices_1 PRIMARY KEY (officecode);
-ALTER TABLE tab_orderdetails ADD CONSTRAINT PK_orderdetails_1 PRIMARY KEY (ordernumber, productcode);
+ALTER TABLE orderdetails ADD CONSTRAINT PK_orderdetails_1 PRIMARY KEY (ordernumber, productcode);
 ALTER TABLE tab_orders ADD CONSTRAINT PK_orders_1 PRIMARY KEY (ordernumber);
 ALTER TABLE payments ADD CONSTRAINT PK_payments_1 PRIMARY KEY (customernumber, checknumber);
 ALTER TABLE productlines ADD CONSTRAINT PK_productlines_1 PRIMARY KEY (productline);
@@ -97,8 +104,8 @@ ALTER TABLE test_table ADD CONSTRAINT PK_test_table_1 PRIMARY KEY (test_2);
 ALTER TABLE customers ADD CONSTRAINT FK_customers_salesrepemployeenumber_employeenumber_1 FOREIGN KEY (salesrepemployeenumber) REFERENCES employees(employeenumber);
 ALTER TABLE employees ADD CONSTRAINT FK_employees_officecode_officecode_1 FOREIGN KEY (officecode) REFERENCES tab_offices(officecode);
 ALTER TABLE employees ADD CONSTRAINT FK_employees_reportsto_employeenumber_2 FOREIGN KEY (reportsto) REFERENCES employees(employeenumber);
-ALTER TABLE tab_orderdetails ADD CONSTRAINT FK_orderdetails_ordernumber_ordernumber_1 FOREIGN KEY (ordernumber) REFERENCES tab_orders(ordernumber);
-ALTER TABLE tab_orderdetails ADD CONSTRAINT FK_orderdetails_productcode_productcode_2 FOREIGN KEY (productcode) REFERENCES products(productcode);
+ALTER TABLE orderdetails ADD CONSTRAINT FK_orderdetails_ordernumber_ordernumber_1 FOREIGN KEY (ordernumber) REFERENCES tab_orders(ordernumber);
+ALTER TABLE orderdetails ADD CONSTRAINT FK_orderdetails_productcode_productcode_2 FOREIGN KEY (productcode) REFERENCES products(productcode);
 ALTER TABLE tab_orders ADD CONSTRAINT FK_orders_customernumber_customernumber_1 FOREIGN KEY (customernumber) REFERENCES customers(customernumber);
 ALTER TABLE payments ADD CONSTRAINT FK_payments_customernumber_customernumber_1 FOREIGN KEY (customernumber) REFERENCES customers(customernumber);
 ALTER TABLE products ADD CONSTRAINT FK_products_productline_productline_1 FOREIGN KEY (productline) REFERENCES productlines(productline);
@@ -120,12 +127,12 @@ CREATE UNIQUE INDEX IDX_IDX_IX_IDX_PK_FFICES_1_OFFICES_2_FFICES_2_OFFICES_2_offi
 CREATE UNIQUE INDEX IDX_IDX_IDX_PRIMARY_OFFICES_3_OFFICES_3_offices_3 ON tab_offices(officecode);
 CREATE UNIQUE INDEX IDX_IDX_PK_OFFICES_1_OFFICES_4_offices_4 ON tab_offices(officecode);
 CREATE UNIQUE INDEX IDX_PRIMARY_offices_5 ON tab_offices(officecode);
-CREATE UNIQUE INDEX IDX_IDX_D_DID_PRIMAYREDTA_1_RERDALS__OERDTLS_ORDREIL1_odrdtils_1 ON tab_orderdetails(ordernumber, productcode);
-CREATE UNIQUE INDEX IDX_IDX_IDX_PRIMARY_ORDERDETAILS_3_ORDERDETAILS_3_orderdetails_2 ON tab_orderdetails(ordernumber, productcode);
-CREATE UNIQUE INDEX IDX_IDXDXX_P_ORDEDETALS__ODERETIS_OREDETS_2_ORDTAI__rerdetails_3 ON tab_orderdetails(ordernumber, productcode);
-CREATE UNIQUE INDEX IDX_IDX_PK_ORDERDETAILS_1_ORDERDETAILS_4_orderdetails_4 ON tab_orderdetails(ordernumber, productcode);
-CREATE UNIQUE INDEX IDX_PRIMARY_orderdetails_5 ON tab_orderdetails(ordernumber, productcode);
-CREATE INDEX IDX_DX_IIDX_IX_PRODUCTCODEEAI_2_RDRDEIS3RDEETS__DET5_orderdail_6 ON tab_orderdetails(productcode);
+CREATE UNIQUE INDEX IDX_IDX_D_DID_PRIMAYREDTA_1_RERDALS__OERDTLS_ORDREIL1_odrdtils_1 ON orderdetails(ordernumber, productcode);
+CREATE UNIQUE INDEX IDX_IDX_IDX_PRIMARY_ORDERDETAILS_3_ORDERDETAILS_3_orderdetails_2 ON orderdetails(ordernumber, productcode);
+CREATE UNIQUE INDEX IDX_IDXDXX_P_ORDEDETALS__ODERETIS_OREDETS_2_ORDTAI__rerdetails_3 ON orderdetails(ordernumber, productcode);
+CREATE UNIQUE INDEX IDX_IDX_PK_ORDERDETAILS_1_ORDERDETAILS_4_orderdetails_4 ON orderdetails(ordernumber, productcode);
+CREATE UNIQUE INDEX IDX_PRIMARY_orderdetails_5 ON orderdetails(ordernumber, productcode);
+CREATE INDEX IDX_DX_IIDX_IX_PRODUCTCODEEAI_2_RDRDEIS3RDEETS__DET5_orderdail_6 ON orderdetails(productcode);
 CREATE UNIQUE INDEX IDX_IDX_IDX_IDX_IDX_PRIMRY_OR_1ORDERS_1_ORDERS_1ORDERS_1_order_1 ON tab_orders(ordernumber);
 CREATE UNIQUE INDEX IDX_IDX_IDX_IDX_PK_ORDERS_1_ORDERS_2_ORDERS_2_ORDERS_2_orders_2 ON tab_orders(ordernumber);
 CREATE UNIQUE INDEX IDX_IDX_IDX_PRIMARY_ORDERS_3_ORDERS_3_orders_3 ON tab_orders(ordernumber);

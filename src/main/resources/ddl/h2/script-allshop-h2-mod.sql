@@ -1,3 +1,4 @@
+
 CREATE TABLE offices
 (
   officecode VARCHAR(10) NOT NULL,
@@ -24,10 +25,10 @@ CREATE TABLE products
   productline VARCHAR(50) NOT NULL,
   productscale VARCHAR(10) NOT NULL,
   productvendor VARCHAR(50) NOT NULL,
-  productdescription CLOB NOT NULL,
-  quantityinstock SMALLINT NOT NULL,
-  buyprice DECIMAL NOT NULL,
-  msrp DECIMAL NOT NULL
+  productdescription VARCHAR(50),
+  quantityinstock VARCHAR(50) NOT NULL,
+  buyprice VARCHAR(50) NOT NULL,
+  msrp VARCHAR(50) NOT NULL
 );
 CREATE TABLE test_table
 (
@@ -47,7 +48,7 @@ CREATE TABLE customers
   postalcode VARCHAR(15),
   country VARCHAR(50) NOT NULL,
   salesrepemployeenumber INT,
-  creditlimit DECIMAL
+  creditlimit VARCHAR(50)
 );
 CREATE TABLE orders
 (
@@ -56,7 +57,7 @@ CREATE TABLE orders
   requireddate DATE NOT NULL,
   shippeddate DATE,
   status VARCHAR(15) NOT NULL,
-  comments CLOB,
+  comments VARCHAR(50),
   customernumber INT NOT NULL
 );
 CREATE TABLE orderdetails
@@ -64,7 +65,7 @@ CREATE TABLE orderdetails
   ordernumber INT NOT NULL,
   productcode VARCHAR(15) NOT NULL,
   quantityordered INT NOT NULL,
-  priceeach DECIMAL NOT NULL,
+  priceeach VARCHAR(50) NOT NULL,
   orderlinenumber SMALLINT NOT NULL
 );
 CREATE TABLE payments
@@ -72,7 +73,7 @@ CREATE TABLE payments
   customernumber INT NOT NULL,
   checknumber VARCHAR(50) NOT NULL,
   paymentdate DATE NOT NULL,
-  amount DECIMAL NOT NULL
+  amount VARCHAR(50) NOT NULL
 );
 CREATE TABLE employees
 (
@@ -85,6 +86,13 @@ CREATE TABLE employees
   reportsto INT,
   jobtitle VARCHAR(50) NOT NULL
 );
+
+CREATE TABLE FOO_DATA
+(
+   ID bigint, -- PRIMARY KEY
+   SOME_DATA BLOB
+);
+
 ALTER TABLE customers ADD CONSTRAINT PK_customers_1 PRIMARY KEY (customernumber);
 ALTER TABLE employees ADD CONSTRAINT PK_employees_1 PRIMARY KEY (employeenumber);
 ALTER TABLE offices ADD CONSTRAINT PK_offices_1 PRIMARY KEY (officecode);

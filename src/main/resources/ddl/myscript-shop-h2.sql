@@ -43,3 +43,9 @@ productline varchar(50) NOT NULL PRIMARY KEY, 
 textdescription varchar(4000) DEFAULT NULL, 
 htmldescription longtext, 
 image longblob);
+
+CREATE TABLE FOO_DATA
+(
+   ID bigint, -- PRIMARY KEY
+   SOME_DATA BLOB
+);

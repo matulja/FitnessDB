@@ -30,10 +30,14 @@ public class CustomDefaultColumnTypeMapper implements CustomColumnTypeMapper {
 
         sourceDB=sourceDatabase;
         targetDB=targetDatabase;
+
         createPostgresToMysqlMapping();
         createMysqlToPostresMapping();
+        createMysqlToOracle();
+        createOracleToMysql();
+        createMSSQLToOracle();
         createH2ToDerbyMapping();
-
+        createDerbyToH2Mapping();
     }
 
     @Override
@@ -119,8 +123,6 @@ public class CustomDefaultColumnTypeMapper implements CustomColumnTypeMapper {
         addMapping(DatabaseType.POSTGRESQL, DatabaseType.MYSQL, "UUID", "VARCHAR(36)");
         addMapping(DatabaseType.POSTGRESQL, DatabaseType.MYSQL, "XML", "LONGTEXT");
 
-        System.out.println("Mapping from Postgres to Mysql");
-
     }
 
 
@@ -128,9 +130,12 @@ public class CustomDefaultColumnTypeMapper implements CustomColumnTypeMapper {
 
         addMapping(DatabaseType.H2DB, DatabaseType.DERBY, "LONGTEXT", "CLOB");
         addMapping(DatabaseType.H2DB, DatabaseType.DERBY, "LONGBLOB", "BLOB");
-        System.out.println("Mapping from H2 to Derby");
+    }
 
+    private void createDerbyToH2Mapping() {
 
+        addMapping(DatabaseType.DERBY, DatabaseType.H2DB, "LONGTEXT", "CLOB");
+        addMapping(DatabaseType.DERBY, DatabaseType.H2DB, "LONGBLOB", "BLOB");
 
     }
 
@@ -160,12 +165,83 @@ public class CustomDefaultColumnTypeMapper implements CustomColumnTypeMapper {
         addMapping(DatabaseType.MYSQL, DatabaseType.POSTGRESQL, "TINYTEXT", "TEXT");
         addMapping(DatabaseType.MYSQL, DatabaseType.POSTGRESQL, "VARBINARY", "BYTEA");
 
-        System.out.println("Mapping from Mysql to Postgres");
+    }
 
+    private void createMysqlToOracle() {
 
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "BIT", "RAW");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "BIGINT", "NUMBER(19, 0)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "DATETIME", "DATE");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "DECIMAL", "FLOAT (24)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "DOUBLE", "FLOAT (24)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "DOUBLE PRECISION", "FLOAT (24)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "ENUM", "VARCHAR2");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "INT", "NUMBER(10, 0)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "INTEGER", "NUMBER(10, 0)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "LONGBLOB", "BLOB");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "LONGTEXT", "CLOB");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "MEDIUMBLOB", "BLOB");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "MEDIUMINT", "NUMBER(7, 0)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "MEDIUMTEXT", "CLOB");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "NUMERIC", "NUMBER");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "REAL", "FLOAT (24)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "SET", "VARCHAR2");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "SMALLINT", "NUMBER(5, 0)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "TEXT", "VARCHAR2");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "TIME", "DATE");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "TIMESTAMP", "DATE");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "TINYBLOB", "RAW");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "TINYINT", "NUMBER(3, 0)");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "TINYTEXT", "VARCHAR2");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "YEAR", "NUMBER");
+        addMapping(DatabaseType.MYSQL, DatabaseType.ORACLE, "VARBINARY", "BYTEA");
 
     }
 
+    private void createOracleToMysql() {
 
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "RAW", "BIT");                  //TINYBLOB
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "NUMBER(19, 0)", "BIGINT");
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "DATE", "DATETIME");
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "FLOAT (24)", "DECIMAL");       // DOUBLE, DOUBLE PRECISION, REAL
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "VARCHAR2", "ENUM");
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "NUMBER(10, 0)", "INT");        // INTEGER
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "BLOB", "LONGBLOB");            // MEDIUMBLOB
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "CLOB", "MEDIUMTEXT");
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "NUMBER(7, 0)", "MEDIUMINT");
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "NUMBER", "NUMERIC");           //YEAR
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "VARCHAR2", "SET");             //TEXT, TINYTEXT
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "NUMBER(5, 0)", "SMALLINT");
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "DATE", "TIME");                //TIMESTAMP
+        addMapping(DatabaseType.ORACLE, DatabaseType.MYSQL, "BYTEA", "VARBINARY");
+
+    }
+
+    private void createMSSQLToOracle() {
+
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "BIGINT", "NUMBER(19)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "BINARY", "RAW");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "BIT", "NUMBER(3)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "DATETIME", "DATE");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "DECIMAL", "NUMBER(p[,s])");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "FLOAT", "FLOAT(49)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "IMAGE", "LONG RAW");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "INTEGER", "NUMBER(10");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "MONEY", "NUMBER(19,4)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "NTEXT", "LONG");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "NVARCHAR", "NCHAR");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "NUMERIC", "NUMBER(p[,s])");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "REAL", "FLOAT(23)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "SMALL DATETIME", "DATE");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "SMALL MONEY", "NUMBER(10,4)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "SMALLINT", "NUMBER(5)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "TEXT", "LONG");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "TIMESTAMP", "RAW");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "TINYINT", "NUMBER(3)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "UNIQUEIDENTIFIER", "CHAR(36)");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "VARBINARY", "RAW");
+        addMapping(DatabaseType.MSSQL, DatabaseType.ORACLE, "VARCHAR", "VARCHAR2");
+
+    }
 
 }
