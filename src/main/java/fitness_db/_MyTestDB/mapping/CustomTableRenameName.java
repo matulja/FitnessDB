@@ -2,7 +2,6 @@ package fitness_db._MyTestDB.mapping;
 
 import de.akquinet.jbosscc.guttenbase.hints.CaseConversionMode;
 import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.meta.DatabaseMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 
@@ -19,13 +18,12 @@ import java.util.Map;
  *
  * @author M. Dahm
  */
-public class CustomTableRenameName implements TableNameMapper, TableMapper {
+public class CustomTableRenameName implements TableMapper {
 
 
     private final Map<String, String> replacementsTables = new HashMap<>();
     private final CaseConversionMode _caseConversionMode;
     private final boolean _addSchema;
-
 
     public CustomTableRenameName(final CaseConversionMode caseConversionMode, final boolean addSchema) {
         assert caseConversionMode != null : "caseConversionMode != null";
@@ -34,7 +32,7 @@ public class CustomTableRenameName implements TableNameMapper, TableMapper {
 
         //addReplacement("offices", "tab_offices");
         //addReplacement("orders", "tab_orders");
-       // addReplacement("orderdetails", "tab_ordersdetails");
+        // addReplacement("orderdetails", "tab_ordersdetails");
     }
 
     public CustomTableRenameName() {
@@ -43,6 +41,7 @@ public class CustomTableRenameName implements TableNameMapper, TableMapper {
 
     @Override
     public TableMetaData map(TableMetaData source, DatabaseMetaData targetDatabaseMetaData) throws SQLException {
+
         final String defaultTableName = _caseConversionMode.convert(source.getTableName());
         final String tableName = replacementsTables.containsKey(defaultTableName)?
                 replacementsTables.get(defaultTableName): defaultTableName;
@@ -51,9 +50,9 @@ public class CustomTableRenameName implements TableNameMapper, TableMapper {
     }
 
     @Override
-    public String mapTableName(final TableMetaData sourceTableMetaData, final DatabaseMetaData targetDatabaseMetaData) throws SQLException {
+    public String mapTableName(TableMetaData source, DatabaseMetaData targetDatabaseMetaData) throws SQLException {
 
-        String result = _caseConversionMode.convert(sourceTableMetaData.getTableName());
+        String result = _caseConversionMode.convert(source.getTableName());
         final String schema = targetDatabaseMetaData.getSchema();
         final String tableName = replacementsTables.get(result);
 
@@ -72,5 +71,12 @@ public class CustomTableRenameName implements TableNameMapper, TableMapper {
         replacementsTables.put(sourceTable, targetTable);
 
         return this;
+    }
+
+    @Override
+    public String fullyQualifiedTableName(TableMetaData source, DatabaseMetaData targetDatabaseMetaData) throws SQLException {
+
+        final String schema = targetDatabaseMetaData.getSchemaPrefix();
+        return schema + mapTableName(source, targetDatabaseMetaData);
     }
 }

@@ -3,7 +3,6 @@ package fitness_db._MyTestDB.mapping;
 import com.sun.tools.doclets.formats.html.SourceToHTMLConverter;
 import de.akquinet.jbosscc.guttenbase.hints.TableOrderHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
 import de.akquinet.jbosscc.guttenbase.meta.ColumnMetaData;
 import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
@@ -19,7 +18,7 @@ import java.util.*;
  *
  */
 
-public class CustomColumnRenameName implements ColumnNameMapper, ColumnMapper{
+public class CustomColumnRenameName implements ColumnMapper{
 
     private final Map<String, String> replacementsColumns = new HashMap<>();
 
@@ -37,9 +36,9 @@ public class CustomColumnRenameName implements ColumnNameMapper, ColumnMapper{
     }
 
     @Override
-    public String mapColumnName(ColumnMetaData columnMetaData){
+    public String mapColumnName(ColumnMetaData source, TableMetaData targetTableMetaData) throws SQLException {
 
-        String result = columnMetaData.getColumnName();
+        String result = source.getColumnName();
         final String columnName = replacementsColumns.get(result);
 
         if(columnName == null)
@@ -52,7 +51,6 @@ public class CustomColumnRenameName implements ColumnNameMapper, ColumnMapper{
         replacementsColumns.put(sourceComn, targetColumn);
         return this;
     }
-
 }
 
 
