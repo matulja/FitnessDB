@@ -1,0 +1,40 @@
+----------------------------------------------------------------
+Wed Apr 26 16:53:26 CEST 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a816c00e-015b-aac0-b005-000005e63d58 
+on database directory /Users/mfehler/IdeaProjects/FitnessDB/target/db/derby1  with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/Users/mfehler/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_121-b13
+user.dir=/Users/mfehler/IdeaProjects/FitnessDB
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Apr 26 16:53:32 CEST 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 649ac26e-015b-aac0-b005-000005e63d58 
+on database directory /Users/mfehler/IdeaProjects/FitnessDB/target/db/derby2  with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/Users/mfehler/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_121-b13
+user.dir=/Users/mfehler/IdeaProjects/FitnessDB
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Apr 26 16:53:34 CEST 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 8a1ec4ce-015b-aac0-b005-000005e63d58 
+on database directory /Users/mfehler/IdeaProjects/FitnessDB/target/db/derby3  with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/Users/mfehler/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_121-b13
+user.dir=/Users/mfehler/IdeaProjects/FitnessDB
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Wed Apr 26 16:53:35 CEST 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 2ee90709-015b-aac0-b005-000005e63d58 
+on database directory /Users/mfehler/IdeaProjects/FitnessDB/target/db/derby4  with class loader sun.misc.Launcher$AppClassLoader@5c647e05 
+Loaded from file:/Users/mfehler/.m2/repository/org/apache/derby/derby/10.8.2.2/derby-10.8.2.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_121-b13
+user.dir=/Users/mfehler/IdeaProjects/FitnessDB
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
