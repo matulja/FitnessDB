@@ -17,7 +17,6 @@
         </plugins>
     </build>
 
-
     <groupId>FitnessDB</groupId>
     <artifactId>FitnessDB</artifactId>
     <version>1.3-SNAPSHOT</version>
@@ -28,19 +27,53 @@
             <version>1.3-SNAPSHOT</version>
         </dependency>
 
-               <dependency>
-                  <groupId>com.h2database</groupId>
-                    <artifactId>h2</artifactId>
-                   <version>1.3.166</version>
-               </dependency>
+        <dependency>
+            <groupId>de.akquinet.jbosscc.guttenbase</groupId>
+            <artifactId>GuttenBase</artifactId>
+            <version>1.3-SNAPSHOT</version>
+           <type>test-jar</type>
+        </dependency>
+
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.3.166</version>
+        </dependency>
 
 
-        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <!-- https://mvnrepository.com/artifact/oracle/ojdbc6 -->
+        <dependency>
+            <groupId>com.oracle</groupId>
+            <artifactId>ojdbc6</artifactId>
+            <version>11.2.0.3</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.ibm.db2/db2jcc -->
+           <dependency>
+              <groupId>com.ibm.db2</groupId>
+              <artifactId>db2jcc4</artifactId>
+              <version>10.1</version>
+          </dependency>
+
+        <!--  <dependency>
+         <groupId>com.ibm</groupId>
+         <artifactId>db2jcc4</artifactId>
+         <version>4.14</version>
+         </dependency> -->
+
+         <dependency>
+                 <groupId>com.ibm.db2</groupId>
+                 <artifactId>db2jcc_license_cu</artifactId>
+                 <version>9.7</version>
+             </dependency>
+
+            <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>42.0.0</version>
         </dependency>
+
 
         <!-- GuttenBase -->
 
@@ -67,6 +100,7 @@
             <version>10.8.2.2</version>
             <scope>test</scope>
         </dependency>
+
 
 
     </dependencies>

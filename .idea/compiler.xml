@@ -8,13 +8,19 @@
         <outputRelativeToContentRoot value="true" />
         <module name="FitnessDB" />
         <module name="GuttenBase" />
+        <module name="GuttenBase_Examples" />
         <module name="MyTest_DB" />
+        <module name="TEST_DB" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="FitnessDB" target="1.8" />
       <module name="GuttenBase" target="1.8" />
+      <module name="GuttenBase_Examples" target="1.8" />
+      <module name="GuttenBase_main" target="1.5" />
+      <module name="GuttenBase_test" target="1.5" />
       <module name="MyTest_DB" target="1.8" />
+      <module name="TEST_DB" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
