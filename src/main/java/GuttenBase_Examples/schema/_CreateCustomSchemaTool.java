@@ -2,7 +2,7 @@ package GuttenBase_Examples.schema;
 
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.tools.ScriptExecutorTool;
-import de.akquinet.jbosscc.guttenbase.tools.schema.DatabaseSchemaScriptCreator;
+
 
 
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ public class _CreateCustomSchemaTool
 
 {
     private final ConnectorRepository _connectorRepository;
+    public static final int MAX_ID_LENGTH = 64;
     private final int _maxIdLength;
 
 
@@ -31,7 +32,7 @@ public class _CreateCustomSchemaTool
 
     public _CreateCustomSchemaTool(final ConnectorRepository connectorRepository)
     {
-        this(connectorRepository, DatabaseSchemaScriptCreator.MAX_ID_LENGTH);
+        this(connectorRepository, MAX_ID_LENGTH);
     }
 
     public List<String> createDDLScript(final String connectorId, final String targetConnectorId) throws Exception

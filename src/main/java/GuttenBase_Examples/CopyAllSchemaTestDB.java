@@ -1,18 +1,15 @@
 package GuttenBase_Examples;
 
+import GuttenBase_Examples.connInfo.PostgreConnetionsInfo;
+import GuttenBase_Examples.connInfo.SqlConnectionsInfo;
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
-import de.akquinet.jbosscc.guttenbase.hints.CustomColumnTypeMapperHint;
-import de.akquinet.jbosscc.guttenbase.mapping.CustomColumnTypeMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.CustomDefaultColumnTypeMapper;
+import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
+import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
+import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
-import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
-import de.akquinet.jbosscc.guttenbase.tools.schema.CreateCustomSchemaTool;
-import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
-import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
-import GuttenBase_Examples.connInfo.MyPostgreConnetionsInfoTest;
-import GuttenBase_Examples.connInfo.MySqlConnectionsInfoTest;
+import de.akquinet.jbosscc.guttenbase.tools.schema.CopySchemaTool;
 
 import java.util.List;
 
@@ -33,12 +30,12 @@ public class CopyAllSchemaTestDB {
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
 
         //add Source & Target ConnectionInfo
-        connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfoTest());
-        connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfoTest());
+        connectorRepository.addConnectionInfo(SOURCE, new SqlConnectionsInfo());
+        connectorRepository.addConnectionInfo(TARGET, new PostgreConnetionsInfo());
 
         //from postgres to sql
-        //connectorRepository.addConnectionInfo(SOURCE, new MyPostgreConnetionsInfoTest());
-        // connectorRepository.addConnectionInfo(TARGET, new MySqlConnectionsInfoTest());
+        //connectorRepository.addConnectionInfo(SOURCE, new PostgreConnetionsInfo());
+         //connectorRepository.addConnectionInfo(TARGET, new SqlConnectionsInfo());
 
         DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
         dropTablesTool.dropIndexes(TARGET);
@@ -46,26 +43,26 @@ public class CopyAllSchemaTestDB {
         dropTablesTool.dropTables(TARGET);
 
         //add  ColumnType  --> replace columnType
-        connectorRepository.addConnectorHint(SOURCE, new CustomColumnTypeMapperHint() {
+        connectorRepository.addConnectorHint(SOURCE, new ColumnTypeMapperHint() {
                     @Override
-                    public CustomColumnTypeMapper getValue() {
-                         return new CustomDefaultColumnTypeMapper(DatabaseType.MYSQL, DatabaseType.POSTGRESQL);
+                    public ColumnTypeMapper getValue() {
+                         return new DefaultColumnTypeMapper();
                     }
                 });
 
         //copy Schema
-        List<String> script = new CreateCustomSchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
+        List<String> script = new CopySchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
         for (String s : script) {System.out.println(s);}
 
-        new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+        //new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
         System.out.println("Schema Done");
 
-        SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
+        /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("Issues: "+ issues);
         if(!issues.isSevere()) {
 
             new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
-        }
+        }*/
 
     }
 

@@ -1,0 +1,27 @@
+
+ //add MappingColumn  --> rename columns
+
+
+      connectorRepository.addConnectorHint(TARGET, new ColumnMapperHint() {
+            @Override
+            public ColumnMapper getValue() {
+                return new CustomColumnRenameName()
+                        .addReplacement("kunde_nr", "id_kunde_nr")
+                        .addReplacement("kr_name", "id_kr_name");
+
+            }
+        });
+
+
+        //add MappingTable  --> rename tables
+
+
+
+        connectorRepository.addConnectorHint(TARGET, new TableMapperHint() {
+            @Override
+            public TableMapper getValue() {
+                return new CustomTableRenameName()
+                        .addReplacement("kurse", "tab_kurse")
+                        .addReplacement("kunde", "tab_kunde");
+            }
+        });

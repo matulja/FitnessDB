@@ -6,14 +6,13 @@ import de.akquinet.jbosscc.guttenbase.connector.impl.URLConnectorInfoImpl;
 /**
  * Created by mfehler on 21.03.17.
  */
-public class MyPostgreConnetionsInfoTest extends URLConnectorInfoImpl {
+public class SqlConnectionsInfo extends URLConnectorInfoImpl  {
 
     private static final long serialVersionUID = 1L;
 
-    public MyPostgreConnetionsInfoTest() {
-        super("jdbc:postgresql://localhost/", "user", "pass",
-                "org.postgresql.Driver", "shopdb", DatabaseType.POSTGRESQL);
+        public SqlConnectionsInfo() {
+          super("jdbc:mysql://localhost:3306/", "mary", "password",
+                  "com.mysql.jdbc.Driver", "shopdb2", DatabaseType.MYSQL);
+        }
+
     }
-
-
-}

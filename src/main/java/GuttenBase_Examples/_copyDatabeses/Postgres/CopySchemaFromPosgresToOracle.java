@@ -1,35 +1,34 @@
-package GuttenBase_Examples;
+package GuttenBase_Examples._copyDatabeses.Postgres;
 
+import GuttenBase_Examples.connInfo.OracleConnetionsInfo;
 import GuttenBase_Examples.connInfo.PostgreConnetionsInfo;
-import GuttenBase_Examples.connInfo.SqlConnectionsInfo;
 import GuttenBase_Examples.mapping.CustomColumnNameFilter;
+import GuttenBase_Examples.mapping.CustomColumnRenameName;
+import GuttenBase_Examples.mapping.CustomTableNameFilter;
 import GuttenBase_Examples.mapping.CustomTableRenameName;
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnMapperHint;
+
 import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.TableMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
+
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
-import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CopySchemaTool;
 
-import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
-import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
-import GuttenBase_Examples.mapping.CustomColumnRenameName;
-import GuttenBase_Examples.mapping.CustomTableNameFilter;
 
 import java.util.List;
 
 
 /**
- * Created by mfehler on 21.03.17.
+ * Created by mfehler on 08.05.17.
  */
-public class CopyFilterSchemaTestDB {
+public class CopySchemaFromPosgresToOracle {
 
 
     public static final String SOURCE = "source";
@@ -38,13 +37,9 @@ public class CopyFilterSchemaTestDB {
     public static void main(final String[] args) throws Exception {
 
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
+        connectorRepository.addConnectionInfo(SOURCE, new PostgreConnetionsInfo());
+        connectorRepository.addConnectionInfo(TARGET, new OracleConnetionsInfo());
 
-        connectorRepository.addConnectionInfo(SOURCE, new SqlConnectionsInfo());
-       connectorRepository.addConnectionInfo(TARGET, new PostgreConnetionsInfo());
-
-        //from postgres to sql
-       // connectorRepository.addConnectionInfo(SOURCE, new PostgreConnetionsInfo());
-       // connectorRepository.addConnectionInfo(TARGET, new SqlConnectionsInfo());
 
         DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
         dropTablesTool.dropIndexes(TARGET);
@@ -64,8 +59,6 @@ public class CopyFilterSchemaTestDB {
             @Override
             public ColumnMapper getValue() {
                 return new CustomColumnRenameName()
-                        .addReplacement("officecode", "id_officecode")
-                        .addReplacement("ordernumber", "id_ordernumber")
                         .addReplacement("phone", "id_phone")
                         .addReplacement("city", "id_city");
             }
@@ -78,20 +71,19 @@ public class CopyFilterSchemaTestDB {
             public TableMapper getValue() {
                 return new CustomTableRenameName()
                         .addReplacement("offices", "tab_offices")
-                        .addReplacement("orders", "tab_orders")
-                        .addReplacement("orderdetails", "tab_ordersdetails");
+                        .addReplacement("orders", "tab_orders");
             }
         });
 
 
         //add  ColumnType  --> replace columnType
+       /* connectorRepository.addConnectorHint(SOURCE, new ColumnTypeMapperHint() {
+                    @Override
+                    public ColumnTypeMapper getValue() {
+                         return new DefaultColumnTypeMapper(DatabaseType.POSTGRESQL, DatabaseType.ORACLE);
+                    }
+                });*/
 
-        connectorRepository.addConnectorHint(TARGET, new ColumnTypeMapperHint() {
-            @Override
-            public ColumnTypeMapper getValue() {
-                return new DefaultColumnTypeMapper();
-            }
-        });
 
         List<String> script = new CopySchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
         for (String s : script) {System.out.println(s);}
@@ -100,13 +92,13 @@ public class CopyFilterSchemaTestDB {
         System.out.println("Schema Done");
 
 
-        SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
+        /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("Issues: "+ issues);
         if(!issues.isSevere()) {
 
             new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
 
-        }
+        }*/
 
     }
 

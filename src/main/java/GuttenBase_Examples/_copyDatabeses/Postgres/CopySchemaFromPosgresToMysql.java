@@ -1,29 +1,29 @@
-package fitness_db._MyTestDB;
+package GuttenBase_Examples._copyDatabeses.Postgres;
 
+import GuttenBase_Examples.connInfo.PostgreConnetionsInfo;
+import GuttenBase_Examples.connInfo.SqlConnectionsInfo;
+import GuttenBase_Examples.mapping.CustomColumnNameFilter;
+import GuttenBase_Examples.mapping.CustomColumnRenameName;
+import GuttenBase_Examples.mapping.CustomTableNameFilter;
+import GuttenBase_Examples.mapping.CustomTableRenameName;
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnMapperHint;
-import de.akquinet.jbosscc.guttenbase.hints.ColumnNameMapperHint;
+import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
+
 import de.akquinet.jbosscc.guttenbase.hints.TableMapperHint;
-import de.akquinet.jbosscc.guttenbase.hints.TableNameMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.ColumnNameMapper;
+import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
+
+import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.TableNameMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
+import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
+import de.akquinet.jbosscc.guttenbase.tools.schema.CopySchemaTool;
+
 import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
-import fitness_db._MyTestDB.connInfo.MyPostgreConnetionsInfoTest;
-import fitness_db._MyTestDB.connInfo.MySqlConnectionsInfoTest;
-import fitness_db._MyTestDB.mapping.CustomColumnNameFilter;
-import fitness_db._MyTestDB.mapping.CustomColumnRenameName;
-import fitness_db._MyTestDB.mapping.CustomTableNameFilter;
-import fitness_db._MyTestDB.mapping.CustomTableRenameName;
-import fitness_db._MyTestDB.schema.CreateCustomSchemaTool;
-import fitness_db._MyTestDB.schema.type_column.CustomColumnTypeMapper;
-import fitness_db._MyTestDB.schema.type_column.CustomColumnTypeMapperHint;
-import fitness_db._MyTestDB.schema.type_column.CustomDefaultColumnTypeMapper;
 
 import java.util.List;
 
@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Created by mfehler on 21.03.17.
  */
-public class CopyFilterSchemaTestDB {
+public class CopySchemaFromPosgresToMysql {
 
 
     public static final String SOURCE = "source";
@@ -40,19 +40,20 @@ public class CopyFilterSchemaTestDB {
     public static void main(final String[] args) throws Exception {
 
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
-        connectorRepository.addConnectionInfo(SOURCE, new MySqlConnectionsInfoTest());
-        connectorRepository.addConnectionInfo(TARGET, new MyPostgreConnetionsInfoTest());
 
-        //from postgres to sql
-        //connectorRepository.addConnectionInfo(SOURCE, new MyPostgreConnetionsInfoTest());
-        //connectorRepository.addConnectionInfo(TARGET, new MySqlConnectionsInfoTest());
+        connectorRepository.addConnectionInfo(SOURCE, new PostgreConnetionsInfo());
+        connectorRepository.addConnectionInfo(TARGET, new SqlConnectionsInfo());
 
+        DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
+        dropTablesTool.dropIndexes(TARGET);
+        dropTablesTool.dropForeignKeys(TARGET);
+        dropTablesTool.dropTables(TARGET);
 
-        //add Mapping TableFilter
+        //add _Mapping TableFilter
         connectorRepository.addConnectorHint(SOURCE,new CustomTableNameFilter());
         connectorRepository.addConnectorHint(TARGET,new CustomTableNameFilter());
 
-        //add Mapping ColumnFilter
+        //add _Mapping ColumnFilter
         connectorRepository.addConnectorHint(SOURCE,new CustomColumnNameFilter());
         connectorRepository.addConnectorHint(TARGET,new CustomColumnNameFilter());
 
@@ -67,16 +68,7 @@ public class CopyFilterSchemaTestDB {
                         .addReplacement("city", "id_city");
             }
         });
-        connectorRepository.addConnectorHint(TARGET, new ColumnNameMapperHint() {
-            @Override
-            public ColumnNameMapper getValue() {
-                return new CustomColumnRenameName()
-                        .addReplacement("officecode", "id_officecode")
-                        .addReplacement("ordernumber", "id_ordernumber")
-                        .addReplacement("phone", "id_phone")
-                        .addReplacement("city", "id_city");
-            }
-        });
+
 
         //add MappingTable  --> rename tables
         connectorRepository.addConnectorHint(TARGET, new TableMapperHint() {
@@ -88,43 +80,33 @@ public class CopyFilterSchemaTestDB {
                         .addReplacement("orderdetails", "tab_ordersdetails");
             }
         });
-        connectorRepository.addConnectorHint(TARGET, new TableNameMapperHint() {
-            @Override
-            public TableNameMapper getValue() {
-                return new CustomTableRenameName()
-                        .addReplacement("offices", "tab_offices")
-                        .addReplacement("orders", "tab_orders")
-                        .addReplacement("orderdetails", "tab_ordersdetails");
-            }
-        });
-
 
 
         //add  ColumnType  --> replace columnType
-        connectorRepository.addConnectorHint(SOURCE, new CustomColumnTypeMapperHint() {
+       /* connectorRepository.addConnectorHint(SOURCE, new ColumnTypeMapperHint() {
                     @Override
-                    public CustomColumnTypeMapper getValue() {
-                         return new CustomDefaultColumnTypeMapper(DatabaseType.MYSQL, DatabaseType.POSTGRESQL);
+                    public ColumnTypeMapper getValue() {
+                         return new DefaultColumnTypeMapper(DatabaseType.POSTGRESQL, DatabaseType.MYSQL);
                     }
-                });
+                });*/
 
 
-        List<String> script = new CreateCustomSchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
+        List<String> script = new CopySchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
         for (String s : script) {System.out.println(s);}
 
-        new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+        new CopySchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
         System.out.println("Schema Done");
+
 
         SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("Issues: "+ issues);
         if(!issues.isSevere()) {
 
             new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
+
         }
 
-
     }
-
 
 }
 
