@@ -9,15 +9,18 @@ import GuttenBase_Examples.mapping.CustomTableRenameName;
 import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
+import de.akquinet.jbosscc.guttenbase.hints.NumberOfRowsPerBatchHint;
 import de.akquinet.jbosscc.guttenbase.hints.TableMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
+import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
+import de.akquinet.jbosscc.guttenbase.tools.NumberOfRowsPerBatch;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CopySchemaTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
@@ -47,8 +50,7 @@ public class CopySchemaFromDB2ToMysql {
         dropTablesTool.dropForeignKeys(TARGET);
         dropTablesTool.dropTables(TARGET);
 
-
-        //add _Mapping TableFilter
+      //add _Mapping TableFilter
         connectorRepository.addConnectorHint(SOURCE, new CustomTableNameFilterShop());
         connectorRepository.addConnectorHint(TARGET, new CustomTableNameFilterShop());
 

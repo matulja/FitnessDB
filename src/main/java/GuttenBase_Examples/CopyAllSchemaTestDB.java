@@ -8,8 +8,11 @@ import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
+import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CopySchemaTool;
+import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
+import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
 
 import java.util.List;
 
@@ -54,15 +57,15 @@ public class CopyAllSchemaTestDB {
         List<String> script = new CopySchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
         for (String s : script) {System.out.println(s);}
 
-        //new CreateCustomSchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
+        new CopySchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
         System.out.println("Schema Done");
 
-        /*SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
+        SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("Issues: "+ issues);
         if(!issues.isSevere()) {
 
             new DefaultTableCopyTool(connectorRepository).copyTables(SOURCE, TARGET);
-        }*/
+        }
 
     }
 

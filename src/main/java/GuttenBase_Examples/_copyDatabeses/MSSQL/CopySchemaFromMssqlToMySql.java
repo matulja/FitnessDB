@@ -1,21 +1,10 @@
-package GuttenBase_Examples._copyDatabeses.DB2;
+package GuttenBase_Examples._copyDatabeses.MSSQL;
 
-import GuttenBase_Examples._copyDatabeses._Mapping.CustomColumnNameFilterShop;
-import GuttenBase_Examples._copyDatabeses._Mapping.CustomTableNameFilterShop;
-import GuttenBase_Examples.connInfo.DB2ConnetionsInfo;
-import GuttenBase_Examples.connInfo.PostgreConnetionsInfo;
-import GuttenBase_Examples.mapping.CustomColumnRenameName;
-import GuttenBase_Examples.mapping.CustomTableRenameName;
-import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
-import de.akquinet.jbosscc.guttenbase.hints.ColumnMapperHint;
+import GuttenBase_Examples.connInfo.MSSQLConnectionsInfo;
+import GuttenBase_Examples.connInfo.SqlConnectionsInfo;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
-
-import de.akquinet.jbosscc.guttenbase.hints.TableMapperHint;
-import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
-
 import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
-import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
@@ -29,9 +18,9 @@ import java.util.List;
 
 
 /**
- * Created by mfehler on 10.05.17.
+ * Created by mfehler on 16.05.17.
  */
-public class CopySchemaFromDB2ToPostgres {
+public class CopySchemaFromMssqlToMySql {
 
 
     public static final String SOURCE = "source";
@@ -40,8 +29,8 @@ public class CopySchemaFromDB2ToPostgres {
     public static void main(final String[] args) throws Exception {
 
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
-        connectorRepository.addConnectionInfo(SOURCE, new DB2ConnetionsInfo());
-        connectorRepository.addConnectionInfo(TARGET, new PostgreConnetionsInfo());
+        connectorRepository.addConnectionInfo(SOURCE, new MSSQLConnectionsInfo());
+        connectorRepository.addConnectionInfo(TARGET, new SqlConnectionsInfo());
 
 
         DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
@@ -49,24 +38,23 @@ public class CopySchemaFromDB2ToPostgres {
         dropTablesTool.dropForeignKeys(TARGET);
         dropTablesTool.dropTables(TARGET);
 
-
         //add _Mapping TableFilter
-        connectorRepository.addConnectorHint(SOURCE, new CustomTableNameFilterShop());
-        connectorRepository.addConnectorHint(TARGET, new CustomTableNameFilterShop());
+    //    connectorRepository.addConnectorHint(SOURCE, new CustomTableNameFilter());
+   //     connectorRepository.addConnectorHint(TARGET, new CustomTableNameFilter());
 
         //add _Mapping ColumnFilter
-        connectorRepository.addConnectorHint(SOURCE, new CustomColumnNameFilterShop());
-        connectorRepository.addConnectorHint(TARGET, new CustomColumnNameFilterShop());
+    //    connectorRepository.addConnectorHint(SOURCE, new CustomColumnNameFilter());
+    //    connectorRepository.addConnectorHint(TARGET, new CustomColumnNameFilter());
 
         //add MappingColumn  --> rename columns
-        connectorRepository.addConnectorHint(TARGET, new ColumnMapperHint() {
+     /*  connectorRepository.addConnectorHint(TARGET, new ColumnMapperHint() {
             @Override
             public ColumnMapper getValue() {
                 return new CustomColumnRenameName()
-                        .addReplacement("OFFICECODE", "id_officcode")
-                        .addReplacement("ORDERNUMBER", "id_ordernumber")
-                        .addReplacement("PHONE", "id_phone")
-                        .addReplacement("CITY", "id_city");
+                        .addReplacement("officecode", "id_officecode")
+                        .addReplacement("ordernumber", "id_ordernumber")
+                        .addReplacement("phone", "id_phone")
+                        .addReplacement("city", "id_city");
             }
         });
 
@@ -76,11 +64,11 @@ public class CopySchemaFromDB2ToPostgres {
             @Override
             public TableMapper getValue() {
                 return new CustomTableRenameName()
-                        .addReplacement("OFFICES", "tab_offices")
-                        .addReplacement("ORDERS", "tab_orders")
-                        .addReplacement("ORDERDETAILS", "tab_orderdetails");
+                        .addReplacement("offices", "tab_offices")
+                        .addReplacement("orders", "tab_orders")
+                        .addReplacement("orderdetails", "tab_ordersdetails");
             }
-        });
+        });*/
 
         //add  ColumnType  --> replace columnType
         connectorRepository.addConnectorHint(SOURCE, new ColumnTypeMapperHint() {
@@ -92,10 +80,13 @@ public class CopySchemaFromDB2ToPostgres {
 
 
         List<String> script = new CopySchemaTool(connectorRepository).createDDLScript(SOURCE, TARGET);
-        for (String s : script) {System.out.println(s);}
+        for (String s : script) {
+            System.out.println(s);
+        }
+
 
         new CopySchemaTool(connectorRepository).copySchema(SOURCE, TARGET);
-        System.out.println("Schema Done");
+        System.out.println("SCHEMA DONE !!!");
 
         SchemaCompatibilityIssues issues = new SchemaComparatorTool(connectorRepository).check(SOURCE, TARGET);
         System.out.println("ISSUES : " + issues);

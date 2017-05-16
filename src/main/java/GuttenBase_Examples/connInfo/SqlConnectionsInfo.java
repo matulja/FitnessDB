@@ -12,7 +12,7 @@ public class SqlConnectionsInfo extends URLConnectorInfoImpl  {
 
         public SqlConnectionsInfo() {
           super("jdbc:mysql://localhost:3306/", "mary", "password",
-                  "com.mysql.jdbc.Driver", "shopdb2", DatabaseType.MYSQL);
+                  "com.mysql.jdbc.Driver", "shopDB", DatabaseType.MYSQL);
         }
 
     }

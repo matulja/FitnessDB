@@ -3,23 +3,24 @@ package GuttenBase_Examples._copyDatabeses.DB2;
 import GuttenBase_Examples._copyDatabeses._Mapping.CustomColumnNameFilterShop;
 import GuttenBase_Examples._copyDatabeses._Mapping.CustomTableNameFilterShop;
 import GuttenBase_Examples.connInfo.DB2ConnetionsInfo;
+import GuttenBase_Examples.connInfo.MSSQLConnectionsInfo;
 import GuttenBase_Examples.connInfo.PostgreConnetionsInfo;
 import GuttenBase_Examples.mapping.CustomColumnRenameName;
 import GuttenBase_Examples.mapping.CustomTableRenameName;
-import de.akquinet.jbosscc.guttenbase.connector.DatabaseType;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnMapperHint;
 import de.akquinet.jbosscc.guttenbase.hints.ColumnTypeMapperHint;
-
+import de.akquinet.jbosscc.guttenbase.hints.NumberOfRowsPerBatchHint;
 import de.akquinet.jbosscc.guttenbase.hints.TableMapperHint;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.ColumnTypeMapper;
-
 import de.akquinet.jbosscc.guttenbase.mapping.DefaultColumnTypeMapper;
 import de.akquinet.jbosscc.guttenbase.mapping.TableMapper;
+import de.akquinet.jbosscc.guttenbase.meta.TableMetaData;
 import de.akquinet.jbosscc.guttenbase.repository.ConnectorRepository;
 import de.akquinet.jbosscc.guttenbase.repository.impl.ConnectorRepositoryImpl;
 import de.akquinet.jbosscc.guttenbase.tools.DefaultTableCopyTool;
 import de.akquinet.jbosscc.guttenbase.tools.DropTablesTool;
+import de.akquinet.jbosscc.guttenbase.tools.NumberOfRowsPerBatch;
 import de.akquinet.jbosscc.guttenbase.tools.schema.CopySchemaTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaComparatorTool;
 import de.akquinet.jbosscc.guttenbase.tools.schema.comparison.SchemaCompatibilityIssues;
@@ -29,9 +30,9 @@ import java.util.List;
 
 
 /**
- * Created by mfehler on 10.05.17.
+ * Created by mfehler on 16.05.17.
  */
-public class CopySchemaFromDB2ToPostgres {
+public class CopySchemaFromDB2ToMssql {
 
 
     public static final String SOURCE = "source";
@@ -41,13 +42,30 @@ public class CopySchemaFromDB2ToPostgres {
 
         final ConnectorRepository connectorRepository = new ConnectorRepositoryImpl();
         connectorRepository.addConnectionInfo(SOURCE, new DB2ConnetionsInfo());
-        connectorRepository.addConnectionInfo(TARGET, new PostgreConnetionsInfo());
+        connectorRepository.addConnectionInfo(TARGET, new MSSQLConnectionsInfo());
 
 
         DropTablesTool dropTablesTool = new DropTablesTool(connectorRepository);
         dropTablesTool.dropIndexes(TARGET);
         dropTablesTool.dropForeignKeys(TARGET);
         dropTablesTool.dropTables(TARGET);
+
+        connectorRepository.addConnectorHint(TARGET, new NumberOfRowsPerBatchHint() {
+            @Override
+            public NumberOfRowsPerBatch getValue() {
+                return new NumberOfRowsPerBatch() {
+                    @Override
+                    public int getNumberOfRowsPerBatch(TableMetaData targetTableMetaData) {
+                        return 1000;
+                    }
+
+                    @Override
+                    public boolean useMultipleValuesClauses(TableMetaData targetTableMetaData) {
+                        return false;
+                    }
+                };
+            }
+        });
 
 
         //add _Mapping TableFilter
