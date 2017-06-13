@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/../GuttenBase/GuttenBase.iml" filepath="$PROJECT_DIR$/../GuttenBase/GuttenBase.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/GuttenBase_Examples.iml" filepath="$PROJECT_DIR$/.idea/GuttenBase_Examples.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../InfluxDB/InfluxDB.iml" filepath="$PROJECT_DIR$/../InfluxDB/InfluxDB.iml" />
     </modules>
   </component>
 </project>

@@ -7,7 +7,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:46 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 0a42424f-015b-cde7-91cb-000005bcbf08 
@@ -17,7 +17,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:49 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 918e0490-015b-cde7-91cb-000005bcbf08 
@@ -27,7 +27,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:52 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance e3c5c6cb-015b-cde7-91cb-000005bcbf08 
@@ -37,7 +37,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:54 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance d1f0890c-015b-cde7-91cb-000005bcbf08 
@@ -47,7 +47,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:58 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 44b50b69-015b-cde7-91cb-000005bcbf08 
@@ -57,7 +57,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:00 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 9cebcdc6-015b-cde7-91cb-000005bcbf08 
@@ -67,7 +67,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:02 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 82001001-015b-cde7-91cb-000005bcbf08 
@@ -77,7 +77,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:04 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 5104d25e-015b-cde7-91cb-000005bcbf08 
@@ -87,7 +87,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:07 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance ed08d4be-015b-cde7-91cb-000005bcbf08 
@@ -97,7 +97,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:09 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance f20cd71e-015b-cde7-91cb-000005bcbf08 
@@ -107,7 +107,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:10 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 4cf31959-015b-cde7-91cb-000005bcbf08 
@@ -117,7 +117,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:12 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 0dff1bb9-015b-cde7-91cb-000005bcbf08 
@@ -127,7 +127,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:43:14 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a5d4ddde-015b-cde7-91cb-000005bcbf08 
@@ -137,7 +137,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 losively(FrameworkMethod.java:47)
 	at org.junit.internal.runners.statements.InvokeMethod.evaluate(InvokeMethod.java:17)
 	at org.junit.internal.runners.statements.RunBefores.evaluate(RunBefores.java:26)
@@ -1152,7 +1152,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:49 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance a2a01501-015b-cde7-57e3-000005c3d2c8 
@@ -1162,7 +1162,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 
 ------------  BEGIN SHUTDOWN ERROR STACK -------------
 
@@ -1915,7 +1915,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:52 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance d62617d0-015b-cde7-57e3-000005c3d2c8 
@@ -1925,7 +1925,7 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''
 ----------------------------------------------------------------
 Wed May 03 12:42:54 CEST 2017:
 Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.2.2 - (1181258): instance 755099f5-015b-cde7-57e3-000005c3d2c8 
@@ -1935,4 +1935,4 @@ java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_121-b13
 user.dir=/Users/mfehler/IdeaProjects/FitnessDB
 derby.system.home=null
-Database Class Loader started - derby.database.classpath=''
+InfluxDB Class Loader started - derby.database.classpath=''

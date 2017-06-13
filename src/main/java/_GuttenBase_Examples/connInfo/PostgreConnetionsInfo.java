@@ -12,7 +12,7 @@ private static final long serialVersionUID = 1L;
 
 public PostgreConnetionsInfo() {
         super("jdbc:postgresql://localhost/", "user", "pass",
-        "org.postgresql.Driver", "shoporacle", DatabaseType.POSTGRESQL);
+        "org.postgresql.Driver", "still", DatabaseType.POSTGRESQL);
         }
 
 
